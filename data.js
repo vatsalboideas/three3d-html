@@ -154,7 +154,7 @@ var data = {
       faceSize: 4096,
       initialViewParameters: {
         pitch: 0,
-        yaw: 3.14,
+        yaw: 4.7,
         fov: 1.5707963267948966,
       },
       linkHotspots: [
@@ -212,8 +212,8 @@ var data = {
       },
       linkHotspots: [
         {
-          yaw: 1.4,
-          pitch: 0,
+          yaw: 1.3,
+          pitch: 0.3,
           rotation: 0,
           target: "preFunctionArea4",
         },
@@ -271,14 +271,14 @@ var data = {
           target: "centerView",
         },
       ],
-      // infoHotspots: [
-      //   {
-      //     yaw: 0.5350080558065997,
-      //     pitch: 0.24525106321929435,
-      //     title: "Jerónimos Monastery",
-      //     text: "The Jerónimos Monastery cloister is a pleasant and serene place intended to foster monks’ prayers and meditation. Its manuelin decoration features decorative religious, nautical and royal elements, as well as vegetal motifs. Since 1985, the tomb of the poet Fernando Pessoa rests in the north wing of the cloister’s ground floor.",
-      //   },
-      // ],
+      infoHotspots: [
+        {
+          yaw: -0.2,
+          pitch: -0.45,
+          title: "Way to Ball Room",
+          text: "The Jerónimos Monastery cloister is a pleasant and serene place intended to foster monks’ prayers and meditation. Its manuelin decoration features decorative religious, nautical and royal elements, as well as vegetal motifs. Since 1985, the tomb of the poet Fernando Pessoa rests in the north wing of the cloister’s ground floor.",
+        },
+      ],
     },
     {
       id: "centerView",
@@ -325,7 +325,7 @@ var data = {
         },
         {
           yaw: 0,
-          pitch: 0,
+          pitch: 0.15,
           rotation: 0,
           target: "stageView",
         },
@@ -377,13 +377,13 @@ var data = {
       },
       linkHotspots: [
         {
-          yaw: 0,
+          yaw: -0.2,
           pitch: 0.2,
           rotation: 0,
           target: "centerView",
         },
         {
-          yaw: 0,
+          yaw: -0.2,
           pitch: 0,
           rotation: 0,
           target: "backView",
@@ -443,7 +443,7 @@ var data = {
         },
         {
           yaw: 0.1,
-          pitch: 0,
+          pitch: 0.1,
           rotation: 0,
           target: "stageView",
         },
@@ -726,7 +726,7 @@ var data = {
   name: "Four Seasons 3D Viewer",
   settings: {
     mouseViewMode: "drag",
-    autorotateEnabled: false,
+    autorotateEnabled: true,
     fullscreenButton: true,
     viewControlButtons: true,
   },
