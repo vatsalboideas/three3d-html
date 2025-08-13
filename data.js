@@ -563,6 +563,165 @@ var data = {
       //   },
       // ],
     },
+    {
+      id: "corporateDimensionsView",
+      name: "Corporate Dimensions View",
+      images: {
+        low: "/images/dimensions/dim-corporate.webp",
+        high: "https://fourseasons-tril.s3.ap-south-1.amazonaws.com/dim-corporate.jpg",
+      },
+      levels: [
+        {
+          tileSize: 256,
+          size: 256,
+          fallbackOnly: true,
+        },
+        {
+          tileSize: 512,
+          size: 512,
+        },
+        {
+          tileSize: 512,
+          size: 1024,
+        },
+        {
+          tileSize: 512,
+          size: 2048,
+        },
+        {
+          tileSize: 512,
+          size: 4096,
+        },
+      ],
+      faceSize: 4096,
+      initialViewParameters: {
+        pitch: 0,
+        yaw: 0,
+        fov: 1.5707963267948966,
+      },
+      // linkHotspots: [
+      //   {
+      //     yaw: -0.775981148319735,
+      //     pitch: 0.2661802812323746,
+      //     rotation: 0,
+      //     target: "oriente-station",
+      //   },
+      // ],
+      // infoHotspots: [
+      //   {
+      //     yaw: 0.5350080558065997,
+      //     pitch: 0.24525106321929435,
+      //     title: "Jerónimos Monastery",
+      //     text: "The Jerónimos Monastery cloister is a pleasant and serene place intended to foster monks’ prayers and meditation. Its manuelin decoration features decorative religious, nautical and royal elements, as well as vegetal motifs. Since 1985, the tomb of the poet Fernando Pessoa rests in the north wing of the cloister’s ground floor.",
+      //   },
+      // ],
+    },
+    {
+      id: "dimEntryView",
+      name: "Entry Dimensions View",
+      images: {
+        low: "/images/dimensions/dim-entry.webp",
+        high: "https://fourseasons-tril.s3.ap-south-1.amazonaws.com/dim-entry.png",
+      },
+      levels: [
+        {
+          tileSize: 256,
+          size: 256,
+          fallbackOnly: true,
+        },
+        {
+          tileSize: 512,
+          size: 512,
+        },
+        {
+          tileSize: 512,
+          size: 1024,
+        },
+        {
+          tileSize: 512,
+          size: 2048,
+        },
+        {
+          tileSize: 512,
+          size: 4096,
+        },
+      ],
+      faceSize: 4096,
+      initialViewParameters: {
+        pitch: 0,
+        yaw: 3.14,
+        fov: 1.5707963267948966,
+      },
+      // linkHotspots: [
+      //   {
+      //     yaw: -0.775981148319735,
+      //     pitch: 0.2661802812323746,
+      //     rotation: 0,
+      //     target: "oriente-station",
+      //   },
+      // ],
+      // infoHotspots: [
+      //   {
+      //     yaw: 0.5350080558065997,
+      //     pitch: 0.24525106321929435,
+      //     title: "Jerónimos Monastery",
+      //     text: "The Jerónimos Monastery cloister is a pleasant and serene place intended to foster monks’ prayers and meditation. Its manuelin decoration features decorative religious, nautical and royal elements, as well as vegetal motifs. Since 1985, the tomb of the poet Fernando Pessoa rests in the north wing of the cloister’s ground floor.",
+      //   },
+      // ],
+    },
+    {
+      id: "dimPreView",
+      name: "Pre Entry Dimensions View",
+      images: {
+        low: "/images/dimensions/dim-pre.webp",
+        high: "https://fourseasons-tril.s3.ap-south-1.amazonaws.com/dim-pre.png",
+      },
+      levels: [
+        {
+          tileSize: 256,
+          size: 256,
+          fallbackOnly: true,
+        },
+        {
+          tileSize: 512,
+          size: 512,
+        },
+        {
+          tileSize: 512,
+          size: 1024,
+        },
+        {
+          tileSize: 512,
+          size: 2048,
+        },
+        {
+          tileSize: 512,
+          size: 4096,
+        },
+      ],
+      faceSize: 4096,
+      initialViewParameters: {
+        pitch: 0,
+        yaw: 3.14,
+        fov: 1.5707963267948966,
+      },
+      // linkHotspots: [
+      //   {
+      //     yaw: -0.775981148319735,
+      //     pitch: 0.2661802812323746,
+      //     rotation: 0,
+      //     target: "oriente-station",
+      //   },
+      // ],
+      // infoHotspots: [
+      //   {
+      //     yaw: 0.5350080558065997,
+      //     pitch: 0.24525106321929435,
+      //     title: "Jerónimos Monastery",
+      //     text: "The Jerónimos Monastery cloister is a pleasant and serene place intended to foster monks’ prayers and meditation. Its manuelin decoration features decorative religious, nautical and royal elements, as well as vegetal motifs. Since 1985, the tomb of the poet Fernando Pessoa rests in the north wing of the cloister’s ground floor.",
+      //   },
+      // ],
+    },
   ],
   name: "Four Seasons 3D Viewer",
   settings: {
