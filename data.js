@@ -48,25 +48,25 @@ var data = {
       faceSize: 4096,
       initialViewParameters: {
         pitch: 0,
-        yaw: 0,
+        yaw: 3.14,
         fov: 1.5707963267948966,
       },
       linkHotspots: [
         {
           yaw: 3.12678386676067,
-          pitch: -0.0076340532339251865,
+          pitch: 0.3,
           rotation: 0,
           target: "electricity-museum",
         },
       ],
-      infoHotspots: [
-        {
-          yaw: -0.00038049728702915786,
-          pitch: 0.014985751462495145,
-          title: "Oriente Station",
-          text: "The Oriente Station is one of the most important bus and train stations in the city. Designed by the Spanish architect and engineer Santiago Calatrava, it has an enormous metal skeleton that covers the eight train lines and its platforms. Finished in 1998 to serve the Expo’98 and, later, the Parque das Nações area, in its surroundings are companies, services, hotels, bars, animation, as well as the well known Vasco da Gama shopping centre.",
-        },
-      ],
+      // infoHotspots: [
+      //   {
+      //     yaw: -0.00038049728702915786,
+      //     pitch: 0.014985751462495145,
+      //     title: "Oriente Station",
+      //     text: "The Oriente Station is one of the most important bus and train stations in the city. Designed by the Spanish architect and engineer Santiago Calatrava, it has an enormous metal skeleton that covers the eight train lines and its platforms. Finished in 1998 to serve the Expo’98 and, later, the Parque das Nações area, in its surroundings are companies, services, hotels, bars, animation, as well as the well known Vasco da Gama shopping centre.",
+      //   },
+      // ],
     },
     {
       id: "electricity-museum",
@@ -101,25 +101,25 @@ var data = {
       faceSize: 4096,
       initialViewParameters: {
         pitch: 0,
-        yaw: 0,
-        fov: 1.5707963267948966,
+        yaw: 3.14,
+        fov: 0,
       },
       linkHotspots: [
         {
-          yaw: -2.3152585099587224,
-          pitch: 0.045251205931975846,
-          rotation: 5.497787143782138,
+          yaw: 3.14,
+          pitch: 0.2,
+          rotation: 0,
           target: "jeronimos",
         },
       ],
-      infoHotspots: [
-        {
-          yaw: -0.1606464893205768,
-          pitch: -0.17433292221669205,
-          title: "Boilers Room",
-          text: "In the impressive Boilers Room at the Electricity Museum we find four large boilers of about 100 feet tall, with their respective control panels, air and fuel circuits, ventilators, etc. Boiler number 15 has been musealised and visitors may go in and discover its structure and internal component: conveyor belt, Bailey walls, naphtha burners, water heating tubes, and so on.",
-        },
-      ],
+      // infoHotspots: [
+      //   {
+      //     yaw: -0.1606464893205768,
+      //     pitch: -0.17433292221669205,
+      //     title: "Boilers Room",
+      //     text: "In the impressive Boilers Room at the Electricity Museum we find four large boilers of about 100 feet tall, with their respective control panels, air and fuel circuits, ventilators, etc. Boiler number 15 has been musealised and visitors may go in and discover its structure and internal component: conveyor belt, Bailey walls, naphtha burners, water heating tubes, and so on.",
+      //   },
+      // ],
     },
     {
       id: "jeronimos",
@@ -154,25 +154,25 @@ var data = {
       faceSize: 4096,
       initialViewParameters: {
         pitch: 0,
-        yaw: 0,
+        yaw: 3.14,
         fov: 1.5707963267948966,
       },
       linkHotspots: [
         {
-          yaw: -0.775981148319735,
-          pitch: 0.2661802812323746,
+          yaw: 4.6,
+          pitch: 0.3,
           rotation: 0,
-          target: "oriente-station",
+          target: "preFunctionArea3",
         },
       ],
-      infoHotspots: [
-        {
-          yaw: 0.5350080558065997,
-          pitch: 0.24525106321929435,
-          title: "Jerónimos Monastery",
-          text: "The Jerónimos Monastery cloister is a pleasant and serene place intended to foster monks’ prayers and meditation. Its manuelin decoration features decorative religious, nautical and royal elements, as well as vegetal motifs. Since 1985, the tomb of the poet Fernando Pessoa rests in the north wing of the cloister’s ground floor.",
-        },
-      ],
+      // infoHotspots: [
+      //   {
+      //     yaw: 0.5350080558065997,
+      //     pitch: 0.24525106321929435,
+      //     title: "Jerónimos Monastery",
+      //     text: "The Jerónimos Monastery cloister is a pleasant and serene place intended to foster monks’ prayers and meditation. Its manuelin decoration features decorative religious, nautical and royal elements, as well as vegetal motifs. Since 1985, the tomb of the poet Fernando Pessoa rests in the north wing of the cloister’s ground floor.",
+      //   },
+      // ],
     },
     {
       id: "preFunctionArea3",
@@ -207,25 +207,25 @@ var data = {
       faceSize: 4096,
       initialViewParameters: {
         pitch: 0,
-        yaw: 0,
+        yaw: 1.2,
         fov: 1.5707963267948966,
       },
       linkHotspots: [
         {
-          yaw: -0.775981148319735,
-          pitch: 0.2661802812323746,
+          yaw: 1.4,
+          pitch: 0,
           rotation: 0,
-          target: "oriente-station",
+          target: "preFunctionArea4",
         },
       ],
-      infoHotspots: [
-        {
-          yaw: 0.5350080558065997,
-          pitch: 0.24525106321929435,
-          title: "Jerónimos Monastery",
-          text: "The Jerónimos Monastery cloister is a pleasant and serene place intended to foster monks’ prayers and meditation. Its manuelin decoration features decorative religious, nautical and royal elements, as well as vegetal motifs. Since 1985, the tomb of the poet Fernando Pessoa rests in the north wing of the cloister’s ground floor.",
-        },
-      ],
+      // infoHotspots: [
+      //   {
+      //     yaw: 0.5350080558065997,
+      //     pitch: 0.24525106321929435,
+      //     title: "Jerónimos Monastery",
+      //     text: "The Jerónimos Monastery cloister is a pleasant and serene place intended to foster monks’ prayers and meditation. Its manuelin decoration features decorative religious, nautical and royal elements, as well as vegetal motifs. Since 1985, the tomb of the poet Fernando Pessoa rests in the north wing of the cloister’s ground floor.",
+      //   },
+      // ],
     },
     {
       id: "preFunctionArea4",
@@ -265,20 +265,20 @@ var data = {
       },
       linkHotspots: [
         {
-          yaw: -0.775981148319735,
-          pitch: 0.2661802812323746,
+          yaw: 0,
+          pitch: 0,
           rotation: 0,
-          target: "oriente-station",
+          target: "centerView",
         },
       ],
-      infoHotspots: [
-        {
-          yaw: 0.5350080558065997,
-          pitch: 0.24525106321929435,
-          title: "Jerónimos Monastery",
-          text: "The Jerónimos Monastery cloister is a pleasant and serene place intended to foster monks’ prayers and meditation. Its manuelin decoration features decorative religious, nautical and royal elements, as well as vegetal motifs. Since 1985, the tomb of the poet Fernando Pessoa rests in the north wing of the cloister’s ground floor.",
-        },
-      ],
+      // infoHotspots: [
+      //   {
+      //     yaw: 0.5350080558065997,
+      //     pitch: 0.24525106321929435,
+      //     title: "Jerónimos Monastery",
+      //     text: "The Jerónimos Monastery cloister is a pleasant and serene place intended to foster monks’ prayers and meditation. Its manuelin decoration features decorative religious, nautical and royal elements, as well as vegetal motifs. Since 1985, the tomb of the poet Fernando Pessoa rests in the north wing of the cloister’s ground floor.",
+      //   },
+      // ],
     },
     {
       id: "centerView",
@@ -318,20 +318,26 @@ var data = {
       },
       linkHotspots: [
         {
-          yaw: -0.775981148319735,
-          pitch: 0.2661802812323746,
+          yaw: 3.14,
+          pitch: 0,
           rotation: 0,
-          target: "oriente-station",
+          target: "backView",
         },
-      ],
-      infoHotspots: [
         {
-          yaw: 0.5350080558065997,
-          pitch: 0.24525106321929435,
-          title: "Jerónimos Monastery",
-          text: "The Jerónimos Monastery cloister is a pleasant and serene place intended to foster monks’ prayers and meditation. Its manuelin decoration features decorative religious, nautical and royal elements, as well as vegetal motifs. Since 1985, the tomb of the poet Fernando Pessoa rests in the north wing of the cloister’s ground floor.",
+          yaw: 0,
+          pitch: 0,
+          rotation: 0,
+          target: "stageView",
         },
       ],
+      // infoHotspots: [
+      //   {
+      //     yaw: 0.5350080558065997,
+      //     pitch: 0.24525106321929435,
+      //     title: "Jerónimos Monastery",
+      //     text: "The Jerónimos Monastery cloister is a pleasant and serene place intended to foster monks’ prayers and meditation. Its manuelin decoration features decorative religious, nautical and royal elements, as well as vegetal motifs. Since 1985, the tomb of the poet Fernando Pessoa rests in the north wing of the cloister’s ground floor.",
+      //   },
+      // ],
     },
     {
       id: "stageView",
@@ -371,20 +377,26 @@ var data = {
       },
       linkHotspots: [
         {
-          yaw: -0.775981148319735,
-          pitch: 0.2661802812323746,
+          yaw: 0,
+          pitch: 0.2,
           rotation: 0,
-          target: "oriente-station",
+          target: "centerView",
         },
-      ],
-      infoHotspots: [
         {
-          yaw: 0.5350080558065997,
-          pitch: 0.24525106321929435,
-          title: "Jerónimos Monastery",
-          text: "The Jerónimos Monastery cloister is a pleasant and serene place intended to foster monks’ prayers and meditation. Its manuelin decoration features decorative religious, nautical and royal elements, as well as vegetal motifs. Since 1985, the tomb of the poet Fernando Pessoa rests in the north wing of the cloister’s ground floor.",
+          yaw: 0,
+          pitch: 0,
+          rotation: 0,
+          target: "backView",
         },
       ],
+      // infoHotspots: [
+      //   {
+      //     yaw: 0.5350080558065997,
+      //     pitch: 0.24525106321929435,
+      //     title: "Jerónimos Monastery",
+      //     text: "The Jerónimos Monastery cloister is a pleasant and serene place intended to foster monks’ prayers and meditation. Its manuelin decoration features decorative religious, nautical and royal elements, as well as vegetal motifs. Since 1985, the tomb of the poet Fernando Pessoa rests in the north wing of the cloister’s ground floor.",
+      //   },
+      // ],
     },
     {
       id: "backView",
@@ -424,20 +436,26 @@ var data = {
       },
       linkHotspots: [
         {
-          yaw: -0.775981148319735,
-          pitch: 0.2661802812323746,
+          yaw: 0,
+          pitch: 0.3,
           rotation: 0,
-          target: "oriente-station",
+          target: "centerView",
         },
-      ],
-      infoHotspots: [
         {
-          yaw: 0.5350080558065997,
-          pitch: 0.24525106321929435,
-          title: "Jerónimos Monastery",
-          text: "The Jerónimos Monastery cloister is a pleasant and serene place intended to foster monks’ prayers and meditation. Its manuelin decoration features decorative religious, nautical and royal elements, as well as vegetal motifs. Since 1985, the tomb of the poet Fernando Pessoa rests in the north wing of the cloister’s ground floor.",
+          yaw: 0.1,
+          pitch: 0,
+          rotation: 0,
+          target: "stageView",
         },
       ],
+      // infoHotspots: [
+      //   {
+      //     yaw: 0.5350080558065997,
+      //     pitch: 0.24525106321929435,
+      //     title: "Jerónimos Monastery",
+      //     text: "The Jerónimos Monastery cloister is a pleasant and serene place intended to foster monks’ prayers and meditation. Its manuelin decoration features decorative religious, nautical and royal elements, as well as vegetal motifs. Since 1985, the tomb of the poet Fernando Pessoa rests in the north wing of the cloister’s ground floor.",
+      //   },
+      // ],
     },
     {
       id: "blankView",
@@ -475,28 +493,81 @@ var data = {
         yaw: 0,
         fov: 1.5707963267948966,
       },
-      linkHotspots: [
+      // linkHotspots: [
+      //   {
+      //     yaw: -0.775981148319735,
+      //     pitch: 0.2661802812323746,
+      //     rotation: 0,
+      //     target: "oriente-station",
+      //   },
+      // ],
+      // infoHotspots: [
+      //   {
+      //     yaw: 0.5350080558065997,
+      //     pitch: 0.24525106321929435,
+      //     title: "Jerónimos Monastery",
+      //     text: "The Jerónimos Monastery cloister is a pleasant and serene place intended to foster monks’ prayers and meditation. Its manuelin decoration features decorative religious, nautical and royal elements, as well as vegetal motifs. Since 1985, the tomb of the poet Fernando Pessoa rests in the north wing of the cloister’s ground floor.",
+      //   },
+      // ],
+    },
+    {
+      id: "weddingView",
+      name: "Wedding View",
+      images: {
+        low: "/images/wedding.webp",
+        high: "https://fourseasons-tril.s3.ap-south-1.amazonaws.com/wedding.png",
+      },
+      levels: [
         {
-          yaw: -0.775981148319735,
-          pitch: 0.2661802812323746,
-          rotation: 0,
-          target: "oriente-station",
+          tileSize: 256,
+          size: 256,
+          fallbackOnly: true,
+        },
+        {
+          tileSize: 512,
+          size: 512,
+        },
+        {
+          tileSize: 512,
+          size: 1024,
+        },
+        {
+          tileSize: 512,
+          size: 2048,
+        },
+        {
+          tileSize: 512,
+          size: 4096,
         },
       ],
-      infoHotspots: [
-        {
-          yaw: 0.5350080558065997,
-          pitch: 0.24525106321929435,
-          title: "Jerónimos Monastery",
-          text: "The Jerónimos Monastery cloister is a pleasant and serene place intended to foster monks’ prayers and meditation. Its manuelin decoration features decorative religious, nautical and royal elements, as well as vegetal motifs. Since 1985, the tomb of the poet Fernando Pessoa rests in the north wing of the cloister’s ground floor.",
-        },
-      ],
+      faceSize: 4096,
+      initialViewParameters: {
+        pitch: 0,
+        yaw: 0,
+        fov: 1.5707963267948966,
+      },
+      // linkHotspots: [
+      //   {
+      //     yaw: -0.775981148319735,
+      //     pitch: 0.2661802812323746,
+      //     rotation: 0,
+      //     target: "oriente-station",
+      //   },
+      // ],
+      // infoHotspots: [
+      //   {
+      //     yaw: 0.5350080558065997,
+      //     pitch: 0.24525106321929435,
+      //     title: "Jerónimos Monastery",
+      //     text: "The Jerónimos Monastery cloister is a pleasant and serene place intended to foster monks’ prayers and meditation. Its manuelin decoration features decorative religious, nautical and royal elements, as well as vegetal motifs. Since 1985, the tomb of the poet Fernando Pessoa rests in the north wing of the cloister’s ground floor.",
+      //   },
+      // ],
     },
   ],
-  name: "Sample Tour",
+  name: "Four Seasons 3D Viewer",
   settings: {
     mouseViewMode: "drag",
-    autorotateEnabled: true,
+    autorotateEnabled: false,
     fullscreenButton: true,
     viewControlButtons: true,
   },
