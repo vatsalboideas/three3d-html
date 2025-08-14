@@ -8,8 +8,8 @@ var data = {
       id: "oriente-station",
       name: "Entry Scene",
       images: {
-        low: "/images/1.webp",
-        high: "https://fourseasons-tril.s3.ap-south-1.amazonaws.com/1.png",
+        low: "/images/01.webp",
+        high: "https://fourseasons-tril.s3.ap-south-1.amazonaws.com/01.jpg",
       },
       levels: [
         {
@@ -53,8 +53,8 @@ var data = {
       id: "electricity-museum",
       name: "Pre Function Area 1",
       images: {
-        low: "/images/2.webp",
-        high: "https://fourseasons-tril.s3.ap-south-1.amazonaws.com/2.png",
+        low: "/images/02.webp",
+        high: "https://fourseasons-tril.s3.ap-south-1.amazonaws.com/02.jpg",
       },
       levels: [
         {
@@ -143,8 +143,8 @@ var data = {
       id: "preFunctionArea3",
       name: "Pre Function Area 3",
       images: {
-        low: "/images/4.webp",
-        high: "https://fourseasons-tril.s3.ap-south-1.amazonaws.com/4.png",
+        low: "/images/04.webp",
+        high: "https://fourseasons-tril.s3.ap-south-1.amazonaws.com/04.jpg",
       },
       levels: [
         {
@@ -188,8 +188,8 @@ var data = {
       id: "preFunctionArea4",
       name: "Pre Function Area 4",
       images: {
-        low: "/images/5.webp",
-        high: "https://fourseasons-tril.s3.ap-south-1.amazonaws.com/5.png",
+        low: "/images/05.webp",
+        high: "https://fourseasons-tril.s3.ap-south-1.amazonaws.com/05.jpg",
       },
       levels: [
         {
