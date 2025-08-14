@@ -331,28 +331,62 @@
       }
     });
 
-    currentActiveScene = scene;
-    stopAutorotate();
-    scene.view.setParameters(scene.data.initialViewParameters);
-    
-    // Use getCurrentScene to get the actual current scene (SD or HD)
-    var targetScene = scene.getCurrentScene ? scene.getCurrentScene() : scene.scene;
-    
-    // Update UI immediately to prevent wrong names showing
+    // Update UI first
     updateSceneName(scene);
     updateSceneList(scene);
+
+    var previousScene = currentActiveScene;
+    currentActiveScene = scene;
+    stopAutorotate();
     
-    // Switch scene immediately with no transition to prevent blackout
-    targetScene.switchTo({ transitionDuration: 0 });
+    // Set view parameters
+    scene.view.setParameters(scene.data.initialViewParameters);
     
-    // Start autorotate and upgrades
+    // Get target scene
+    var targetScene = scene.getCurrentScene ? scene.getCurrentScene() : scene.scene;
+    
+    // Create a fade overlay to hide the transition
+    var fadeDiv = document.createElement('div');
+    fadeDiv.style.cssText = `
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: #000;
+      z-index: 9999;
+      opacity: 0;
+      transition: opacity 0.1s ease;
+      pointer-events: none;
+    `;
+    document.body.appendChild(fadeDiv);
+    
+    // Quick fade to black
     setTimeout(() => {
-      if (currentActiveScene === scene && scene.startUpgrade && !scene.isUpgraded) {
-        scene.startUpgrade();
-      }
-    }, 100);
+      fadeDiv.style.opacity = '0.8';
+    }, 10);
     
-    startAutorotate();
+    // Switch scene during fade
+    setTimeout(() => {
+      targetScene.switchTo({ transitionDuration: 0 });
+      
+      // Fade back out
+      setTimeout(() => {
+        fadeDiv.style.opacity = '0';
+        setTimeout(() => {
+          document.body.removeChild(fadeDiv);
+        }, 100);
+      }, 50);
+      
+      // Start autorotate and upgrades
+      setTimeout(() => {
+        startAutorotate();
+        if (currentActiveScene === scene && scene.startUpgrade && !scene.isUpgraded) {
+          scene.startUpgrade();
+        }
+      }, 150);
+      
+    }, 100);
   }
 
 
