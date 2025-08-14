@@ -494,35 +494,35 @@
     if (sceneId === "oriente-station") {
       // Entry scene only
       shouldShowButton = true;
-      if (buttonText) buttonText.textContent = "Dimensions";
+      if (buttonText) buttonText.textContent = "Dimensions Off";
     } else if (sceneId === "electricity-museum") {
       // Pre-function area 1 only
       shouldShowButton = true;
-      if (buttonText) buttonText.textContent = "Dimensions";
+      if (buttonText) buttonText.textContent = "Dimensions Off";
     } else if (sceneId === "stageView") {
       // Corporate stage view only
       shouldShowButton = true;
-      if (buttonText) buttonText.textContent = "Dimensions";
+      if (buttonText) buttonText.textContent = "Dimensions Off";
     } else if (sceneId === "weddingStageView") {
       // Wedding stage view only
       shouldShowButton = true;
-      if (buttonText) buttonText.textContent = "Dimensions";
+      if (buttonText) buttonText.textContent = "Dimensions Off";
     } else if (sceneId === "dimEntryView") {
       // Entry dimensions view
       shouldShowButton = true;
-      if (buttonText) buttonText.textContent = "Back to Entry View";
+      if (buttonText) buttonText.textContent = "Dimensions On";
     } else if (sceneId === "dimPreView") {
       // Pre-function dimensions view
       shouldShowButton = true;
-      if (buttonText) buttonText.textContent = "Back to Pre Function Area 1";
+      if (buttonText) buttonText.textContent = "Dimensions On";
     } else if (sceneId === "corporateDimensionsView") {
       // Corporate dimensions view
       shouldShowButton = true;
-      if (buttonText) buttonText.textContent = "Back to Stage View";
+      if (buttonText) buttonText.textContent = "Dimensions On";
     } else if (sceneId === "weddingDimView") {
       // Wedding dimensions view
       shouldShowButton = true;
-      if (buttonText) buttonText.textContent = "Back to Wedding Stage View";
+      if (buttonText) buttonText.textContent = "Dimensions On";
     }
     
     // Show/hide button with force

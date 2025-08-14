@@ -433,7 +433,7 @@ var data = {
     },
     {
       id: "weddingView",
-      name: "Wedding Main View",
+      name: "Main View",
       category: "wedding",
       images: {
         low: "/images/wedding.webp",
@@ -485,7 +485,7 @@ var data = {
     },
     {
       id: "weddingCenterView",
-      name: "Wedding Center View",
+      name: "Center View",
       category: "wedding",
       images: {
         low: "/images/wedding/center.webp",
@@ -537,7 +537,7 @@ var data = {
     },
     {
       id: "weddingStageView",
-      name: "Wedding Stage View",
+      name: "Stage View",
       category: "wedding",
       images: {
         low: "/images/wedding/stage.webp",
@@ -589,7 +589,7 @@ var data = {
     },
     {
       id: "weddingBackView",
-      name: "Wedding Back View",
+      name: "Back View",
       category: "wedding",
       images: {
         low: "/images/wedding/back.webp",
