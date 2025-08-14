@@ -329,7 +329,7 @@ body.single-scene #sceneListToggle {
   height: 60px;
   margin-left: -30px;
   margin-top: -30px;
-  opacity: 0.9;
+  opacity: 0.5;
   -webkit-transition: opacity 0.2s;
   transition: opacity 0.2s;
 }
@@ -682,6 +682,9 @@ body.view-control-buttons .viewControlButton {
   height: 30px;
 }
 
+.viewControlButton-0 {
+  margin-left: 155px;
+}
 .viewControlButton-1 {
   margin-left: -145px;
 }
@@ -805,12 +808,14 @@ body.view-control-buttons .viewControlButton {
 /* Dimensions Toggle Button */
 #dimensionsToggle {
   position: fixed;
-  bottom: 0px;
-  left: 170px;
-  width: 200px;
+  bottom: 0;
+  left: 50%;
+  min-width: 120px;
+  max-width: 280px;
+  width: auto;
   height: 40px;
+  padding: 0 15px;
   background-color: rgba(103, 115, 131, 0.9);
-  /* border-radius: 20px; */
   display: flex;
   align-items: center;
   justify-content: center;
@@ -818,6 +823,7 @@ body.view-control-buttons .viewControlButton {
   transition: all 0.3s ease;
   z-index: 1000;
   cursor: pointer;
+  white-space: nowrap;
 }
 
 #dimensionsToggle:hover {
@@ -846,9 +852,11 @@ body.view-control-buttons .viewControlButton {
 
 .mobile #dimensionsToggle {
   bottom: 80px;
-  right: 165px;
-  width: 100px;
+  right: 15px;
+  min-width: 100px;
+  max-width: 220px;
   height: 35px;
+  padding: 0 12px;
 }
 
 .mobile #dimensionsToggle .button-text {

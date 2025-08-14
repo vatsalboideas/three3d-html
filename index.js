@@ -67,6 +67,25 @@
     },
   });
 
+  // Scene preloading cache
+  var preloadedScenes = {};
+
+  // Preload scene images to prevent blank screens
+  function preloadSceneImage(imagePath) {
+    if (preloadedScenes[imagePath]) return;
+    
+    var img = new Image();
+    img.crossOrigin = "anonymous";
+    img.onload = function() {
+      preloadedScenes[imagePath] = true;
+      console.log(`📦 Preloaded: ${imagePath}`);
+    };
+    img.onerror = function() {
+      console.log(`❌ Failed to preload: ${imagePath}`);
+    };
+    img.src = imagePath;
+  }
+
   // Create scenes with progressive loading
   var scenes = data.scenes.map(function (sceneData) {
     var imagePaths = {
@@ -214,6 +233,9 @@
         updateQualityInfo();
         scene = hdSceneInstance;
 
+        // Mark scene as upgraded to prevent future reloads
+        sceneInstance.isUpgraded = true;
+
         // Restart autorotate after a short delay to ensure scene is fully loaded
         console.log(`🔄 Restarting autorotate after 8K upgrade for ${sceneData.id}`);
         setTimeout(() => {
@@ -235,13 +257,21 @@
       img.src = imagePaths.high;
     }
 
-    // Add hotspots to initial scene
+    // Add hotspots to initial scene and preload linked scenes
     if (sceneData.linkHotspots) {
       sceneData.linkHotspots.forEach(function (hotspot) {
         var element = createLinkHotspotElement(hotspot);
         scene
           .hotspotContainer()
           .createHotspot(element, { yaw: hotspot.yaw, pitch: hotspot.pitch });
+        
+        // Preload linked scene images to prevent blank screens
+        var linkedSceneData = findSceneDataById(hotspot.target);
+        if (linkedSceneData) {
+          setTimeout(() => {
+            preloadSceneImage(linkedSceneData.images.low);
+          }, 1000);
+        }
       });
     }
 
@@ -258,13 +288,15 @@
       data: sceneData,
       scene: scene,
       view: view,
+      isUpgraded: false,
       getCurrentScene: function() {
         return scene; // This will return the current scene (SD or HD)
       },
       startUpgrade: function () {
+        if (this.isUpgraded) return; // Don't upgrade if already upgraded
         upgradeAborted = false;
         if (upgradeTimeout) clearTimeout(upgradeTimeout);
-        upgradeTimeout = setTimeout(upgradeToHD, 2000);
+        upgradeTimeout = setTimeout(upgradeToHD, 1500); // Reduced delay
         updateQualityInfo();
       },
       stopUpgrade: function () {
@@ -305,14 +337,16 @@
     
     // Use getCurrentScene to get the actual current scene (SD or HD)
     var currentScene = scene.getCurrentScene ? scene.getCurrentScene() : scene.scene;
-    currentScene.switchTo({ transitionDuration: 500 });
+    
+    // Switch with minimal transition to avoid blank screen
+    currentScene.switchTo({ transitionDuration: 200 });
 
-    // Start upgrade for current scene
+    // Only start upgrade if scene is not already upgraded
     setTimeout(() => {
-      if (currentActiveScene === scene && scene.startUpgrade) {
+      if (currentActiveScene === scene && scene.startUpgrade && !scene.isUpgraded) {
         scene.startUpgrade();
       }
-    }, 600);
+    }, 300);
 
     startAutorotate();
     updateSceneName(scene);
@@ -418,19 +452,39 @@
     var sceneId = scene.data.id;
     var shouldShowButton = false;
     
-    // Show button for all relevant scene types
-    if (scene.data.category === "wedding") {
+    // Show button on specific scenes and their dimensions views
+    if (sceneId === "oriente-station") {
+      // Entry scene only
       shouldShowButton = true;
-      if (buttonText) buttonText.textContent = "Wedding Dimensions";
-    } else if (scene.data.category === "corporate") {
+      if (buttonText) buttonText.textContent = "Dimensions";
+    } else if (sceneId === "electricity-museum") {
+      // Pre-function area 1 only
       shouldShowButton = true;
-      if (buttonText) buttonText.textContent = "Corporate Dimensions";
-    } else if (sceneId === "oriente-station") {
+      if (buttonText) buttonText.textContent = "Dimensions";
+    } else if (sceneId === "stageView") {
+      // Corporate stage view only
       shouldShowButton = true;
-      if (buttonText) buttonText.textContent = "Entry Dimensions";
-    } else if (sceneId === "electricity-museum" || sceneId === "jeronimos" || sceneId.includes("preFunctionArea")) {
+      if (buttonText) buttonText.textContent = "Dimensions";
+    } else if (sceneId === "weddingStageView") {
+      // Wedding stage view only
       shouldShowButton = true;
-      if (buttonText) buttonText.textContent = "Pre Function Dimensions";
+      if (buttonText) buttonText.textContent = "Dimensions";
+    } else if (sceneId === "dimEntryView") {
+      // Entry dimensions view
+      shouldShowButton = true;
+      if (buttonText) buttonText.textContent = "Back to Entry View";
+    } else if (sceneId === "dimPreView") {
+      // Pre-function dimensions view
+      shouldShowButton = true;
+      if (buttonText) buttonText.textContent = "Back to Pre Function Area 1";
+    } else if (sceneId === "corporateDimensionsView") {
+      // Corporate dimensions view
+      shouldShowButton = true;
+      if (buttonText) buttonText.textContent = "Back to Stage View";
+    } else if (sceneId === "weddingDimView") {
+      // Wedding dimensions view
+      shouldShowButton = true;
+      if (buttonText) buttonText.textContent = "Back to Wedding Stage View";
     }
     
     // Show/hide button with force
@@ -515,15 +569,31 @@
         var sceneId = currentScene.data.id;
         var targetScene = null;
         
-        // Simple mapping: each scene type goes to its dimensions view
-        if (currentScene.data.category === "wedding") {
-          targetScene = findSceneById("weddingDimView");
-        } else if (currentScene.data.category === "corporate") {
-          targetScene = findSceneById("corporateDimensionsView");
-        } else if (sceneId === "oriente-station") {
+        // Specific scene mappings
+        if (sceneId === "oriente-station") {
+          // Entry scene → Entry dimensions
           targetScene = findSceneById("dimEntryView");
-        } else if (sceneId === "electricity-museum" || sceneId === "jeronimos" || sceneId.includes("preFunctionArea")) {
+        } else if (sceneId === "electricity-museum") {
+          // Pre-function area 1 → Pre-function dimensions
           targetScene = findSceneById("dimPreView");
+        } else if (sceneId === "stageView") {
+          // Corporate stage view → Corporate dimensions
+          targetScene = findSceneById("corporateDimensionsView");
+        } else if (sceneId === "weddingStageView") {
+          // Wedding stage view → Wedding dimensions
+          targetScene = findSceneById("weddingDimView");
+        } else if (sceneId === "dimEntryView") {
+          // Entry dimensions → Back to entry scene
+          targetScene = findSceneById("oriente-station");
+        } else if (sceneId === "dimPreView") {
+          // Pre-function dimensions → Back to pre-function area 1
+          targetScene = findSceneById("electricity-museum");
+        } else if (sceneId === "corporateDimensionsView") {
+          // Corporate dimensions → Back to stage view
+          targetScene = findSceneById("stageView");
+        } else if (sceneId === "weddingDimView") {
+          // Wedding dimensions → Back to wedding stage view
+          targetScene = findSceneById("weddingStageView");
         }
         
         // Switch to target scene

@@ -328,13 +328,13 @@ var data = {
       },
       linkHotspots: [
         {
-          yaw: -0.2,
+          yaw: 0,
           pitch: 0.2,
           rotation: 0,
           target: "centerView",
         },
         {
-          yaw: -0.2,
+          yaw: 0,
           pitch: 0,
           rotation: 0,
           target: "backView",
@@ -386,7 +386,7 @@ var data = {
           target: "centerView",
         },
         {
-          yaw: 0.1,
+          yaw: 0,
           pitch: 0.1,
           rotation: 0,
           target: "stageView",
@@ -574,13 +574,13 @@ var data = {
       },
       linkHotspots: [
         {
-          yaw: -0.2,
+          yaw: 0,
           pitch: 0.2,
           rotation: 0,
           target: "weddingCenterView",
         },
         {
-          yaw: -0.2,
+          yaw: 0,
           pitch: 0,
           rotation: 0,
           target: "weddingBackView",
@@ -632,7 +632,7 @@ var data = {
           target: "weddingCenterView",
         },
         {
-          yaw: 0.1,
+          yaw: 0,
           pitch: 0.1,
           rotation: 0,
           target: "weddingStageView",
@@ -719,8 +719,8 @@ var data = {
       id: "dimEntryView",
       name: "Entry Dimensions View",
       images: {
-        low: "/images/dimensions/dim-entry.webp",
-        high: "https://fourseasons-tril.s3.ap-south-1.amazonaws.com/dim-entry.png",
+        low: "/images/dimensions/entry-dim.webp",
+        high: "https://fourseasons-tril.s3.ap-south-1.amazonaws.com/entry-dim.png",
       },
       levels: [
         {
@@ -752,13 +752,12 @@ var data = {
         fov: 1.5707963267948966,
       },
     },
-
     {
       id: "dimPreView",
       name: "Pre Entry Dimensions View",
       images: {
-        low: "/images/dimensions/dim-pre.webp",
-        high: "https://fourseasons-tril.s3.ap-south-1.amazonaws.com/dim-pre.png",
+        low: "/images/dimensions/pre-dim.webp",
+        high: "https://fourseasons-tril.s3.ap-south-1.amazonaws.com/pre-dim.png",
       },
       levels: [
         {
