@@ -341,41 +341,24 @@
     // Show loading overlay to prevent blackout
     showSceneTransitionOverlay();
     
-    // Preload the scene image first
-    var sceneSource = targetScene.source();
-    var imageUrl = sceneSource.url ? sceneSource.url() : scene.data.images.low;
-    
-    var img = new Image();
-    img.crossOrigin = "anonymous";
-    
-    img.onload = function() {
-      // Image is loaded, now switch scene
+    // Simplified approach - just switch scene with timeout
+    setTimeout(() => {
       targetScene.switchTo({ transitionDuration: 100 });
       
       // Hide overlay after scene switch
       setTimeout(() => {
         hideSceneTransitionOverlay();
-      }, 150);
+      }, 200);
       
       // Start upgrade if needed
       setTimeout(() => {
         if (currentActiveScene === scene && scene.startUpgrade && !scene.isUpgraded) {
           scene.startUpgrade();
         }
-      }, 300);
+      }, 400);
       
       startAutorotate();
-    };
-    
-    img.onerror = function() {
-      // If image fails to load, switch anyway
-      targetScene.switchTo({ transitionDuration: 100 });
-      hideSceneTransitionOverlay();
-      startAutorotate();
-    };
-    
-    // Start loading the image
-    img.src = imageUrl;
+    }, 300);
 
     updateSceneName(scene);
     updateSceneList(scene);
