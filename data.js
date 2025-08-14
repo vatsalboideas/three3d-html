@@ -9,7 +9,7 @@ var data = {
       name: "Entry Scene",
       images: {
         low: "/images/01.webp",
-        high: "https://fourseasons-tril.s3.ap-south-1.amazonaws.com/01.jpg",
+        high: "https://fourseasons-tril.s3.ap-south-1.amazonaws.com/01.png",
       },
       levels: [
         {
@@ -54,7 +54,7 @@ var data = {
       name: "Pre Function Area 1",
       images: {
         low: "/images/02.webp",
-        high: "https://fourseasons-tril.s3.ap-south-1.amazonaws.com/02.jpg",
+        high: "https://fourseasons-tril.s3.ap-south-1.amazonaws.com/02.png",
       },
       levels: [
         {
