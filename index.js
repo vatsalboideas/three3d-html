@@ -338,90 +338,24 @@
     // Use getCurrentScene to get the actual current scene (SD or HD)
     var targetScene = scene.getCurrentScene ? scene.getCurrentScene() : scene.scene;
     
-    // Show loading overlay to prevent blackout
-    showSceneTransitionOverlay();
-    
-    // Simplified approach - just switch scene with timeout
-    setTimeout(() => {
-      targetScene.switchTo({ transitionDuration: 100 });
-      
-      // Hide overlay after scene switch
-      setTimeout(() => {
-        hideSceneTransitionOverlay();
-      }, 200);
-      
-      // Start upgrade if needed
-      setTimeout(() => {
-        if (currentActiveScene === scene && scene.startUpgrade && !scene.isUpgraded) {
-          scene.startUpgrade();
-        }
-      }, 400);
-      
-      startAutorotate();
-    }, 300);
-
+    // Update UI immediately to prevent wrong names showing
     updateSceneName(scene);
     updateSceneList(scene);
-  }
-
-  // Show transition overlay to prevent blackout
-  function showSceneTransitionOverlay() {
-    var overlay = document.getElementById('sceneTransitionOverlay');
-    if (!overlay) {
-      overlay = document.createElement('div');
-      overlay.id = 'sceneTransitionOverlay';
-      overlay.style.cssText = `
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background: rgba(0,0,0,0.7);
-        z-index: 998;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        opacity: 0;
-        transition: opacity 0.2s ease;
-      `;
-      overlay.innerHTML = `
-        <div style="
-          color: white;
-          font-family: Arial, sans-serif;
-          font-size: 16px;
-          display: flex;
-          align-items: center;
-          gap: 10px;
-        ">
-          <div style="
-            width: 20px;
-            height: 20px;
-            border: 2px solid rgba(255,255,255,0.3);
-            border-top: 2px solid white;
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-          "></div>
-          Loading...
-        </div>
-      `;
-      document.body.appendChild(overlay);
-    }
-    overlay.style.display = 'flex';
+    
+    // Switch scene immediately with no transition to prevent blackout
+    targetScene.switchTo({ transitionDuration: 0 });
+    
+    // Start autorotate and upgrades
     setTimeout(() => {
-      overlay.style.opacity = '1';
-    }, 10);
+      if (currentActiveScene === scene && scene.startUpgrade && !scene.isUpgraded) {
+        scene.startUpgrade();
+      }
+    }, 100);
+    
+    startAutorotate();
   }
 
-  // Hide transition overlay
-  function hideSceneTransitionOverlay() {
-    var overlay = document.getElementById('sceneTransitionOverlay');
-    if (overlay) {
-      overlay.style.opacity = '0';
-      setTimeout(() => {
-        overlay.style.display = 'none';
-      }, 200);
-    }
-  }
+
 
   // Initialize first scene
   function initializeFirstScene() {

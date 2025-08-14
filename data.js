@@ -188,8 +188,8 @@ var data = {
       id: "preFunctionArea4",
       name: "Pre Function Area 4",
       images: {
-        low: "/images/05.webp",
-        high: "https://fourseasons-tril.s3.ap-south-1.amazonaws.com/05.jpg",
+        low: "/images/005.webp",
+        high: "https://fourseasons-tril.s3.ap-south-1.amazonaws.com/005.jpg",
       },
       levels: [
         {
@@ -228,14 +228,14 @@ var data = {
           target: "centerView",
         },
       ],
-      infoHotspots: [
-        {
-          yaw: -0.2,
-          pitch: -0.45,
-          title: "Way to Ball Room",
-          text: "This pathway leads to the main ballroom area where events and celebrations take place.",
-        },
-      ],
+      // infoHotspots: [
+      //   {
+      //     yaw: -0.2,
+      //     pitch: -0.45,
+      //     title: "Way to Ball Room",
+      //     text: "This pathway leads to the main ballroom area where events and celebrations take place.",
+      //   },
+      // ],
     },
     {
       id: "centerView",
