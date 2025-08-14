@@ -1,107 +1,240 @@
 <!DOCTYPE html>
 <html>
-<head>
-<title>Four Seasons 3D Viewer | Jio Creative Labs</title>
-<meta name="description" content="A sample 360° tour created by the Marzipano Tool." />
-<meta charset="utf-8">
-<meta name="viewport" content="target-densitydpi=device-dpi, width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no, minimal-ui" />
-<style> @-ms-viewport { width: device-width; } </style>
-<link rel="stylesheet" href="https://www.marzipano.net/demos/common/reset.css">
-<link rel="stylesheet" href="style.css">
-</head>
-<body class="multiple-scenes view-control-buttons">
+  <head>
+    <title>Four Seasons 3D Viewer | Jio Creative Labs</title>
+    <meta
+      name="description"
+      content="A 360° virtual tour of Four Seasons venue spaces."
+    />
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="target-densitydpi=device-dpi, width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no, minimal-ui"
+    />
+    <style>
+      @-ms-viewport {
+        width: device-width;
+      }
+    </style>
+    <link
+      rel="stylesheet"
+      href="https://www.marzipano.net/demos/common/reset.css"
+    />
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body class="multiple-scenes view-control-buttons">
+    <div id="pano"></div>
 
-<div id="pano"></div>
+    <div id="sceneList">
+      <ul class="scenes">
+        <!-- Main Venue Scenes -->
+        <a href="javascript:void(0)" class="scene" data-id="oriente-station">
+          <li class="text">Entry Scene</li>
+        </a>
+        <a href="javascript:void(0)" class="scene" data-id="electricity-museum">
+          <li class="text">Pre Function Area 1</li>
+        </a>
+        <a href="javascript:void(0)" class="scene" data-id="jeronimos">
+          <li class="text">Pre Function Area 2</li>
+        </a>
+        <a href="javascript:void(0)" class="scene" data-id="preFunctionArea3">
+          <li class="text">Pre Function Area 3</li>
+        </a>
+        <a href="javascript:void(0)" class="scene" data-id="preFunctionArea4">
+          <li class="text">Pre Function Area 4</li>
+        </a>
+        <!-- Corporate Group -->
+        <div class="scene-group">
+          <a
+            href="javascript:void(0)"
+            class="scene-group-header"
+            data-group="corporate"
+          >
+            <li class="text">
+              Corporate Views
+              <span class="group-arrow">▼</span>
+            </li>
+          </a>
+          <div class="scene-group-content" data-group="corporate">
+            <a
+              href="javascript:void(0)"
+              class="scene sub-scene"
+              data-id="centerView"
+            >
+              <li class="text">Center View</li>
+            </a>
+            <a
+              href="javascript:void(0)"
+              class="scene sub-scene"
+              data-id="stageView"
+            >
+              <li class="text">Stage View</li>
+            </a>
+            <a
+              href="javascript:void(0)"
+              class="scene sub-scene"
+              data-id="backView"
+            >
+              <li class="text">Back View</li>
+            </a>
+            <a
+              href="javascript:void(0)"
+              class="scene sub-scene"
+              data-id="blankView"
+            >
+              <li class="text">Blank View</li>
+            </a>
+            <!-- <a
+              href="javascript:void(0)"
+              class="scene sub-scene"
+              data-id="corporateDimensionsView"
+            >
+              <li class="text">Corporate Dimensions View</li>
+            </a> -->
+          </div>
+        </div>
 
-<div id="sceneList">
-  <ul class="scenes">
-    <a href="javascript:void(0)" class="scene" data-id="oriente-station">
-      <li class="text">Entry Scene</li>
-    </a>
-    <a href="javascript:void(0)" class="scene" data-id="electricity-museum">
-      <li class="text">Pre Function Area 1</li>
-    </a>
-    <a href="javascript:void(0)" class="scene" data-id="jeronimos">
-      <li class="text">Pre Function Area 2</li>
-    </a>
-    <a href="javascript:void(0)" class="scene" data-id="preFunctionArea3">
-      <li class="text">Pre Function Area 3</li>
-    </a>
-    <a href="javascript:void(0)" class="scene" data-id="preFunctionArea4">
-      <li class="text">Pre Function Area 4</li>
-    </a>
-    <a href="javascript:void(0)" class="scene" data-id="centerView">
-      <li class="text">Center View</li>
-    </a>
-    <a href="javascript:void(0)" class="scene" data-id="stageView">
-      <li class="text">Stage View</li>
-    </a>
-    <a href="javascript:void(0)" class="scene" data-id="backView">
-      <li class="text">Back View</li>
-    </a>
-    <a href="javascript:void(0)" class="scene" data-id="weddingView">
-      <li class="text">Wedding View</li>
-    </a>
-    <a href="javascript:void(0)" class="scene" data-id="blankView">
-      <li class="text">Blank View</li>
-    </a>
-    <a href="javascript:void(0)" class="scene" data-id="corporateDimensionsView">
-      <li class="text">Corporate Dimensions View</li>
-    </a>
-    <a href="javascript:void(0)" class="scene" data-id="dimEntryView">
-      <li class="text">Entry Dimensions View</li>
-    </a>
-    <a href="javascript:void(0)" class="scene d-none" data-id="dimPreView">
-      <li class="text">Pre Entry Dimensions View</li>
-    </a>
-  </ul>
-</div>
+        <!-- Wedding Group -->
+        <div class="scene-group">
+          <a
+            href="javascript:void(0)"
+            class="scene-group-header"
+            data-group="wedding"
+          >
+            <li class="text">
+              Wedding Views
+              <span class="group-arrow">▼</span>
+            </li>
+          </a>
+          <div class="scene-group-content" data-group="wedding">
+            <!-- <a
+              href="javascript:void(0)"
+              class="scene sub-scene"
+              data-id="weddingView"
+            >
+              <li class="text">Wedding Main View</li>
+            </a> -->
+            <a
+              href="javascript:void(0)"
+              class="scene sub-scene"
+              data-id="weddingCenterView"
+            >
+              <li class="text">Center View</li>
+            </a>
+            <a
+              href="javascript:void(0)"
+              class="scene sub-scene"
+              data-id="weddingStageView"
+            >
+              <li class="text">Stage View</li>
+            </a>
+            <a
+              href="javascript:void(0)"
+              class="scene sub-scene"
+              data-id="weddingBackView"
+            >
+              <li class="text">Back View</li>
+            </a>
+            <a
+              href="javascript:void(0)"
+              class="scene sub-scene"
+              data-id="weddingBlankView"
+            >
+              <li class="text">Blank View</li>
+            </a>
+          </div>
+        </div>
 
-<div id="titleBar">
-  <h1 class="sceneName"></h1>
-</div>
+        <!-- Other Dimensions Views -->
+        <!-- <a href="javascript:void(0)" class="scene" data-id="dimEntryView">
+          <li class="text">Entry Dimensions View</li>
+        </a>
+        <a href="javascript:void(0)" class="scene d-none" data-id="dimPreView">
+          <li class="text">Pre Entry Dimensions View</li>
+        </a>
+        <a
+          href="javascript:void(0)"
+          class="scene d-none"
+          data-id="weddingDimView"
+        >
+          <li class="text">Wedding Dimensions View</li>
+        </a> -->
+      </ul>
+    </div>
 
-<a href="javascript:void(0)" id="autorotateToggle">
-  <img class="icon off" src="img/play.png">
-  <img class="icon on" src="img/pause.png">
-</a>
+    <!-- Dimensions View Button -->
+    <a href="javascript:void(0)" id="dimensionsToggle" class="d-none">
+      <div class="icon dimensions-icon">📐</div>
+      <span class="button-text">Dimensions</span>
+    </a>
 
-<a href="javascript:void(0)" id="fullscreenToggle">
-  <img class="icon off" src="img/fullscreen.png">
-  <img class="icon on" src="img/windowed.png">
-</a>
+    <div id="titleBar">
+      <h1 class="sceneName"></h1>
+    </div>
 
-<a href="javascript:void(0)" id="sceneListToggle">
-  <img class="icon off" src="img/expand.png">
-  <img class="icon on" src="img/collapse.png">
-</a>
+    <a href="javascript:void(0)" id="autorotateToggle">
+      <img class="icon off" src="img/play.png" />
+      <img class="icon on" src="img/pause.png" />
+    </a>
 
-<a href="javascript:void(0)" id="viewUp" class="viewControlButton viewControlButton-1">
-  <img class="icon" src="img/up.png">
-</a>
-<a href="javascript:void(0)" id="viewDown" class="viewControlButton viewControlButton-2">
-  <img class="icon" src="img/down.png">
-</a>
-<a href="javascript:void(0)" id="viewLeft" class="viewControlButton viewControlButton-3">
-  <img class="icon" src="img/left.png">
-</a>
-<a href="javascript:void(0)" id="viewRight" class="viewControlButton viewControlButton-4">
-  <img class="icon" src="img/right.png">
-</a>
-<a href="javascript:void(0)" id="viewIn" class="viewControlButton viewControlButton-5">
-  <img class="icon" src="img/plus.png">
-</a>
-<a href="javascript:void(0)" id="viewOut" class="viewControlButton viewControlButton-6">
-  <img class="icon" src="img/minus.png">
-</a>
+    <a href="javascript:void(0)" id="fullscreenToggle">
+      <img class="icon off" src="img/fullscreen.png" />
+      <img class="icon on" src="img/windowed.png" />
+    </a>
 
-<script src="https://www.marzipano.net/demos/common/screenfull.js" ></script>
-<script src="https://www.marzipano.net/demos/common/bowser.js" ></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/marzipano/0.10.2/marzipano.js" ></script>
+    <a href="javascript:void(0)" id="sceneListToggle">
+      <img class="icon off" src="img/expand.png" />
+      <img class="icon on" src="img/collapse.png" />
+    </a>
 
-<script src="data.js"></script>
-<script src="index.js"></script>
+    <a
+      href="javascript:void(0)"
+      id="viewUp"
+      class="viewControlButton viewControlButton-1"
+    >
+      <img class="icon" src="img/up.png" />
+    </a>
+    <a
+      href="javascript:void(0)"
+      id="viewDown"
+      class="viewControlButton viewControlButton-2"
+    >
+      <img class="icon" src="img/down.png" />
+    </a>
+    <a
+      href="javascript:void(0)"
+      id="viewLeft"
+      class="viewControlButton viewControlButton-3"
+    >
+      <img class="icon" src="img/left.png" />
+    </a>
+    <a
+      href="javascript:void(0)"
+      id="viewRight"
+      class="viewControlButton viewControlButton-4"
+    >
+      <img class="icon" src="img/right.png" />
+    </a>
+    <a
+      href="javascript:void(0)"
+      id="viewIn"
+      class="viewControlButton viewControlButton-5"
+    >
+      <img class="icon" src="img/plus.png" />
+    </a>
+    <a
+      href="javascript:void(0)"
+      id="viewOut"
+      class="viewControlButton viewControlButton-6"
+    >
+      <img class="icon" src="img/minus.png" />
+    </a>
 
-</body>
+    <script src="https://www.marzipano.net/demos/common/screenfull.js"></script>
+    <script src="https://www.marzipano.net/demos/common/bowser.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/marzipano/0.10.2/marzipano.js"></script>
+
+    <script src="data.js"></script>
+    <script src="index.js"></script>
+  </body>
 </html>
-
