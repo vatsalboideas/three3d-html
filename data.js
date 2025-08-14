@@ -8,8 +8,8 @@ var data = {
       id: "oriente-station",
       name: "Entry Scene",
       images: {
-        low: "/images/01.webp",
-        high: "https://fourseasons-tril.s3.ap-south-1.amazonaws.com/01.png",
+        low: "/images/001.webp",
+        high: "https://fourseasons-tril.s3.ap-south-1.amazonaws.com/001.png",
       },
       levels: [
         {
@@ -143,8 +143,8 @@ var data = {
       id: "preFunctionArea3",
       name: "Pre Function Area 3",
       images: {
-        low: "/images/04.webp",
-        high: "https://fourseasons-tril.s3.ap-south-1.amazonaws.com/04.jpg",
+        low: "/images/004.webp",
+        high: "https://fourseasons-tril.s3.ap-south-1.amazonaws.com/004.jpg",
       },
       levels: [
         {
@@ -719,8 +719,8 @@ var data = {
       id: "dimEntryView",
       name: "Entry Dimensions View",
       images: {
-        low: "/images/dimensions/entry-dim.webp",
-        high: "https://fourseasons-tril.s3.ap-south-1.amazonaws.com/entry-dim.png",
+        low: "/images/dimensions/entry-dim-0.webp",
+        high: "https://fourseasons-tril.s3.ap-south-1.amazonaws.com/entry-dim-0.png",
       },
       levels: [
         {
