@@ -345,38 +345,64 @@
     // Get target scene
     var targetScene = scene.getCurrentScene ? scene.getCurrentScene() : scene.scene;
     
-    // Create a fade overlay to hide the transition
-    var fadeDiv = document.createElement('div');
-    fadeDiv.style.cssText = `
+    // Create a loading transition overlay
+    var loadingDiv = document.createElement('div');
+    loadingDiv.style.cssText = `
       position: fixed;
       top: 0;
       left: 0;
       width: 100%;
       height: 100%;
-      background: #000;
+      background: rgba(0,0,0,0.8);
       z-index: 9999;
       opacity: 0;
-      transition: opacity 0.1s ease;
+      transition: opacity 0.2s ease;
       pointer-events: none;
+      display: flex;
+      align-items: center;
+      justify-content: center;
     `;
-    document.body.appendChild(fadeDiv);
     
-    // Quick fade to black
+    loadingDiv.innerHTML = `
+      <div style="
+        color: white;
+        font-family: Arial, sans-serif;
+        font-size: 16px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 15px;
+      ">
+        <div style="
+          width: 30px;
+          height: 30px;
+          border: 3px solid rgba(255,255,255,0.3);
+          border-top: 3px solid white;
+          border-radius: 50%;
+          animation: spin 1s linear infinite;
+        "></div>
+        <div>Loading Scene...</div>
+      </div>
+    `;
+    
+    document.body.appendChild(loadingDiv);
+    
+    // Show loading transition
     setTimeout(() => {
-      fadeDiv.style.opacity = '0.8';
+      loadingDiv.style.opacity = '1';
     }, 10);
     
     // Switch scene during fade
     setTimeout(() => {
       targetScene.switchTo({ transitionDuration: 0 });
       
-      // Fade back out
+      // Hide loading transition
       setTimeout(() => {
-        fadeDiv.style.opacity = '0';
+        loadingDiv.style.opacity = '0';
         setTimeout(() => {
-          document.body.removeChild(fadeDiv);
-        }, 100);
-      }, 50);
+          document.body.removeChild(loadingDiv);
+        }, 200);
+      }, 100);
       
       // Start autorotate and upgrades
       setTimeout(() => {
