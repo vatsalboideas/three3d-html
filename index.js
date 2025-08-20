@@ -39,7 +39,7 @@
     var mql = matchMedia("(max-width: 500px), (max-height: 500px)");
     setMode();
     if (mql.addEventListener) {
-      mql.addEventListener('change', setMode);
+      mql.addEventListener("change", setMode);
     } else {
       // Fallback for older browsers
       mql.addListener(setMode);
@@ -73,14 +73,14 @@
   // Preload scene images to prevent blank screens
   function preloadSceneImage(imagePath) {
     if (preloadedScenes[imagePath]) return;
-    
+
     var img = new Image();
     img.crossOrigin = "anonymous";
-    img.onload = function() {
+    img.onload = function () {
       preloadedScenes[imagePath] = true;
       console.log(`📦 Preloaded: ${imagePath}`);
     };
-    img.onerror = function() {
+    img.onerror = function () {
       console.log(`❌ Failed to preload: ${imagePath}`);
     };
     img.src = imagePath;
@@ -152,7 +152,7 @@
         geometry: hdGeometry,
         view: view,
       });
-      
+
       // Add hotspots to HD scene
       if (sceneData.linkHotspots) {
         sceneData.linkHotspots.forEach(function (hotspot) {
@@ -177,10 +177,12 @@
     // HD upgrade function
     function upgradeToHD() {
       if (upgraded || upgradeAborted) return;
-      
+
       // Check if this scene is still active
       if (currentActiveScene !== sceneInstance) {
-        console.log(`🚫 Cancelling ${sceneData.id} upgrade - no longer active scene`);
+        console.log(
+          `🚫 Cancelling ${sceneData.id} upgrade - no longer active scene`
+        );
         upgradeAborted = true;
         return;
       }
@@ -206,11 +208,13 @@
       // Preload HD image
       var img = new Image();
       img.crossOrigin = "anonymous";
-      
+
       img.onload = function () {
         // Double-check scene is still active
         if (currentActiveScene !== sceneInstance || upgradeAborted) {
-          console.log(`🚫 ${sceneData.id} 8K loaded but scene changed - aborting switch`);
+          console.log(
+            `🚫 ${sceneData.id} 8K loaded but scene changed - aborting switch`
+          );
           loading.style.display = "none";
           isUpgrading = false;
           return;
@@ -221,10 +225,10 @@
         var hdSceneInstance = createHDScene();
         var currentParams = scene.view().parameters();
         hdSceneInstance.view().setParameters(currentParams);
-        
+
         // Stop current autorotate before switching
         stopAutorotate();
-        
+
         hdSceneInstance.switchTo({ transitionDuration: 0 });
 
         upgraded = true;
@@ -237,7 +241,9 @@
         sceneInstance.isUpgraded = true;
 
         // Restart autorotate after a short delay to ensure scene is fully loaded
-        console.log(`🔄 Restarting autorotate after 8K upgrade for ${sceneData.id}`);
+        console.log(
+          `🔄 Restarting autorotate after 8K upgrade for ${sceneData.id}`
+        );
         setTimeout(() => {
           startAutorotate();
         }, 300);
@@ -264,7 +270,7 @@
         scene
           .hotspotContainer()
           .createHotspot(element, { yaw: hotspot.yaw, pitch: hotspot.pitch });
-        
+
         // Preload linked scene images to prevent blank screens
         var linkedSceneData = findSceneDataById(hotspot.target);
         if (linkedSceneData) {
@@ -289,7 +295,7 @@
       scene: scene,
       view: view,
       isUpgraded: false,
-      getCurrentScene: function() {
+      getCurrentScene: function () {
         return scene; // This will return the current scene (SD or HD)
       },
       startUpgrade: function () {
@@ -306,15 +312,15 @@
         upgraded = false;
         isUpgrading = false;
         updateQualityInfo();
-        
+
         var loading = document.getElementById("loadingIndicator");
         if (loading) {
           loading.style.display = "none";
         }
       },
-      isUpgrading: function() {
+      isUpgrading: function () {
         return isUpgrading;
-      }
+      },
     };
 
     return sceneInstance;
@@ -338,15 +344,17 @@
     var previousScene = currentActiveScene;
     currentActiveScene = scene;
     stopAutorotate();
-    
+
     // Set view parameters
     scene.view.setParameters(scene.data.initialViewParameters);
-    
+
     // Get target scene
-    var targetScene = scene.getCurrentScene ? scene.getCurrentScene() : scene.scene;
-    
+    var targetScene = scene.getCurrentScene
+      ? scene.getCurrentScene()
+      : scene.scene;
+
     // Create a loading transition overlay
-    var loadingDiv = document.createElement('div');
+    var loadingDiv = document.createElement("div");
     loadingDiv.style.cssText = `
       position: fixed;
       top: 0;
@@ -362,7 +370,7 @@
       align-items: center;
       justify-content: center;
     `;
-    
+
     loadingDiv.innerHTML = `
       <div style="
         color: white;
@@ -384,30 +392,34 @@
         <div>Loading Scene...</div>
       </div>
     `;
-    
+
     document.body.appendChild(loadingDiv);
-    
+
     // Show loading transition
     setTimeout(() => {
-      loadingDiv.style.opacity = '1';
+      loadingDiv.style.opacity = "1";
     }, 10);
-    
+
     // Switch scene during fade
     setTimeout(() => {
       targetScene.switchTo({ transitionDuration: 0 });
-      
+
       // Hide loading transition
       setTimeout(() => {
-        loadingDiv.style.opacity = '0';
+        loadingDiv.style.opacity = "0";
         setTimeout(() => {
           document.body.removeChild(loadingDiv);
         }, 200);
       }, 100);
-      
+
       // Start autorotate and upgrades
       setTimeout(() => {
         startAutorotate();
-        if (currentActiveScene === scene && scene.startUpgrade && !scene.isUpgraded) {
+        if (
+          currentActiveScene === scene &&
+          scene.startUpgrade &&
+          !scene.isUpgraded
+        ) {
           scene.startUpgrade();
         } else {
           // Update quality indicator for already upgraded scenes
@@ -421,11 +433,8 @@
           }
         }
       }, 150);
-      
     }, 100);
   }
-
-
 
   // Initialize first scene
   function initializeFirstScene() {
@@ -463,32 +472,62 @@
   var controls = viewer.controls();
   controls.registerMethod(
     "upElement",
-    new Marzipano.ElementPressControlMethod(viewUpElement, "y", -velocity, friction),
+    new Marzipano.ElementPressControlMethod(
+      viewUpElement,
+      "y",
+      -velocity,
+      friction
+    ),
     true
   );
   controls.registerMethod(
     "downElement",
-    new Marzipano.ElementPressControlMethod(viewDownElement, "y", velocity, friction),
+    new Marzipano.ElementPressControlMethod(
+      viewDownElement,
+      "y",
+      velocity,
+      friction
+    ),
     true
   );
   controls.registerMethod(
     "leftElement",
-    new Marzipano.ElementPressControlMethod(viewLeftElement, "x", -velocity, friction),
+    new Marzipano.ElementPressControlMethod(
+      viewLeftElement,
+      "x",
+      -velocity,
+      friction
+    ),
     true
   );
   controls.registerMethod(
     "rightElement",
-    new Marzipano.ElementPressControlMethod(viewRightElement, "x", velocity, friction),
+    new Marzipano.ElementPressControlMethod(
+      viewRightElement,
+      "x",
+      velocity,
+      friction
+    ),
     true
   );
   controls.registerMethod(
     "inElement",
-    new Marzipano.ElementPressControlMethod(viewInElement, "zoom", -velocity, friction),
+    new Marzipano.ElementPressControlMethod(
+      viewInElement,
+      "zoom",
+      -velocity,
+      friction
+    ),
     true
   );
   controls.registerMethod(
     "outElement",
-    new Marzipano.ElementPressControlMethod(viewOutElement, "zoom", velocity, friction),
+    new Marzipano.ElementPressControlMethod(
+      viewOutElement,
+      "zoom",
+      velocity,
+      friction
+    ),
     true
   );
 
@@ -512,7 +551,7 @@
         el.classList.remove("current");
       }
     }
-    
+
     // Show/hide dimensions button based on scene category
     updateDimensionsButton(scene);
   }
@@ -521,11 +560,11 @@
     if (!dimensionsToggleElement) {
       return;
     }
-    
+
     var buttonText = dimensionsToggleElement.querySelector(".button-text");
     var sceneId = scene.data.id;
     var shouldShowButton = false;
-    
+
     // Show button on specific scenes and their dimensions views
     if (sceneId === "oriente-station") {
       // Entry scene only
@@ -560,7 +599,7 @@
       shouldShowButton = true;
       if (buttonText) buttonText.textContent = "Dimensions On";
     }
-    
+
     // Show/hide button with force
     if (shouldShowButton) {
       dimensionsToggleElement.classList.remove("d-none");
@@ -585,7 +624,7 @@
 
   function startAutoCloseTimer() {
     clearAutoCloseTimer();
-    sceneListAutoCloseTimer = setTimeout(function() {
+    sceneListAutoCloseTimer = setTimeout(function () {
       console.log("⏰ Auto-closing scene list after 5 seconds");
       hideSceneList();
     }, 5000);
@@ -613,14 +652,16 @@
 
   // Scene group dropdown functionality
   function initializeSceneGroups() {
-    sceneGroupHeaders.forEach(function(header) {
-      header.addEventListener("click", function() {
+    sceneGroupHeaders.forEach(function (header) {
+      header.addEventListener("click", function () {
         var groupName = header.getAttribute("data-group");
-        var content = document.querySelector('.scene-group-content[data-group="' + groupName + '"]');
-        
+        var content = document.querySelector(
+          '.scene-group-content[data-group="' + groupName + '"]'
+        );
+
         if (content) {
           var isExpanded = content.classList.contains("expanded");
-          
+
           if (isExpanded) {
             content.classList.remove("expanded");
             header.classList.remove("expanded");
@@ -636,13 +677,13 @@
   // Dimensions button functionality
   function initializeDimensionsButton() {
     if (dimensionsToggleElement) {
-      dimensionsToggleElement.addEventListener("click", function() {
+      dimensionsToggleElement.addEventListener("click", function () {
         var currentScene = currentActiveScene;
         if (!currentScene) return;
-        
+
         var sceneId = currentScene.data.id;
         var targetScene = null;
-        
+
         // Specific scene mappings
         if (sceneId === "oriente-station") {
           // Entry scene → Entry dimensions
@@ -669,7 +710,7 @@
           // Wedding dimensions → Back to wedding stage view
           targetScene = findSceneById("weddingStageView");
         }
-        
+
         // Switch to target scene
         if (targetScene) {
           switchScene(targetScene);
@@ -681,37 +722,37 @@
   function getDimensionsSceneId(weddingSceneId) {
     // Map wedding scenes to their corresponding dimensions scenes
     var dimensionsMap = {
-      "weddingView": "corporateDimensionsView",
-      "weddingCenterView": "corporateDimensionsView", 
-      "weddingStageView": "corporateDimensionsView",
-      "weddingBackView": "corporateDimensionsView",
-      "weddingBlankView": "corporateDimensionsView"
+      weddingView: "corporateDimensionsView",
+      weddingCenterView: "corporateDimensionsView",
+      weddingStageView: "corporateDimensionsView",
+      weddingBackView: "corporateDimensionsView",
+      weddingBlankView: "corporateDimensionsView",
     };
-    
+
     return dimensionsMap[weddingSceneId] || "corporateDimensionsView";
   }
 
   // Scene list interaction listeners
   function addSceneListInteractionListeners() {
-    sceneListElement.addEventListener("mouseenter", function() {
+    sceneListElement.addEventListener("mouseenter", function () {
       console.log("🖱️ Mouse entered scene list - pausing auto-close");
       clearAutoCloseTimer();
     });
 
-    sceneListElement.addEventListener("mouseleave", function() {
+    sceneListElement.addEventListener("mouseleave", function () {
       if (sceneListElement.classList.contains("enabled")) {
         console.log("🖱️ Mouse left scene list - restarting auto-close");
         startAutoCloseTimer();
       }
     });
 
-    sceneListElement.addEventListener("touchstart", function() {
+    sceneListElement.addEventListener("touchstart", function () {
       console.log("👆 Touch detected on scene list - pausing auto-close");
       clearAutoCloseTimer();
     });
 
-    sceneListElement.addEventListener("touchend", function() {
-      setTimeout(function() {
+    sceneListElement.addEventListener("touchend", function () {
+      setTimeout(function () {
         if (sceneListElement.classList.contains("enabled")) {
           console.log("👆 Touch ended - restarting auto-close");
           startAutoCloseTimer();
@@ -757,7 +798,11 @@
     icon.src = "img/link.png";
     icon.classList.add("link-hotspot-icon");
 
-    var transformProperties = ["-ms-transform", "-webkit-transform", "transform"];
+    var transformProperties = [
+      "-ms-transform",
+      "-webkit-transform",
+      "transform",
+    ];
     for (var i = 0; i < transformProperties.length; i++) {
       var property = transformProperties[i];
       icon.style[property] = "rotate(" + hotspot.rotation + "rad)";
@@ -830,8 +875,12 @@
       modal.classList.toggle("visible");
     };
 
-    wrapper.querySelector(".info-hotspot-header").addEventListener("click", toggle);
-    modal.querySelector(".info-hotspot-close-wrapper").addEventListener("click", toggle);
+    wrapper
+      .querySelector(".info-hotspot-header")
+      .addEventListener("click", toggle);
+    modal
+      .querySelector(".info-hotspot-close-wrapper")
+      .addEventListener("click", toggle);
 
     stopTouchAndScrollEventPropagation(wrapper);
 
@@ -840,8 +889,15 @@
 
   function stopTouchAndScrollEventPropagation(element) {
     var eventList = [
-      "touchstart", "touchmove", "touchend", "touchcancel",
-      "pointerdown", "pointermove", "pointerup", "pointercancel", "wheel"
+      "touchstart",
+      "touchmove",
+      "touchend",
+      "touchcancel",
+      "pointerdown",
+      "pointermove",
+      "pointerup",
+      "pointercancel",
+      "wheel",
     ];
     for (var i = 0; i < eventList.length; i++) {
       element.addEventListener(eventList[i], function (event) {
@@ -895,7 +951,9 @@
 
   // Scene switch handlers
   scenes.forEach(function (scene) {
-    var el = document.querySelector('#sceneList .scene[data-id="' + scene.data.id + '"]');
+    var el = document.querySelector(
+      '#sceneList .scene[data-id="' + scene.data.id + '"]'
+    );
     if (el) {
       el.addEventListener("click", function () {
         switchScene(scene);
@@ -912,7 +970,7 @@
   addSceneListInteractionListeners();
   initializeSceneGroups();
   initializeDimensionsButton();
-  
+
   setTimeout(() => {
     if (scenes[0] && scenes[0].startUpgrade) {
       scenes[0].startUpgrade();
@@ -920,5 +978,4 @@
   }, 1000);
 
   initializeFirstScene();
-
 })();
