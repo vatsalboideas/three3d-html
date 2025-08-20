@@ -409,6 +409,9 @@
         startAutorotate();
         if (currentActiveScene === scene && scene.startUpgrade && !scene.isUpgraded) {
           scene.startUpgrade();
+        } else {
+          // Update quality indicator for already upgraded scenes
+          updateQualityIndicatorForScene(scene);
         }
       }, 150);
       
