@@ -411,7 +411,14 @@
           scene.startUpgrade();
         } else {
           // Update quality indicator for already upgraded scenes
-          updateQualityIndicatorForScene(scene);
+          var info = document.getElementById("qualityInfo");
+          if (info) {
+            var isUpgraded = scene.isUpgraded || false;
+            var qualityColor = isUpgraded ? "#4CAF50" : "#FF9800";
+            info.innerHTML = `<div style="color: ${qualityColor};">● ${
+              isUpgraded ? "8K" : "SD"
+            } - ${scene.data.name}</div>`;
+          }
         }
       }, 150);
       
