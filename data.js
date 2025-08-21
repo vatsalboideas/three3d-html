@@ -682,8 +682,8 @@ var data = {
       name: "Dimensions View",
       category: "corporate",
       images: {
-        low: "/images/dimensions/dim-corporate.webp",
-        high: "https://fourseasons-tril.s3.ap-south-1.amazonaws.com/dim-corporate.png",
+        low: "/images/dimensions/dim-corporate-1.webp",
+        high: "https://fourseasons-tril.s3.ap-south-1.amazonaws.com/dim-corporate-1.png",
       },
       levels: [
         {
