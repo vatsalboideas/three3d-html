@@ -42,8 +42,8 @@ var data = {
       },
       linkHotspots: [
         {
-          yaw: 3.12678386676067,
-          pitch: 0.3,
+          yaw: 3.2,
+          pitch: 0.41,
           rotation: 0,
           target: "electricity-museum",
         },
@@ -53,8 +53,8 @@ var data = {
       id: "electricity-museum",
       name: "Pre Function Area 1",
       images: {
-        low: "/images/02.webp",
-        high: "https://fourseasons-tril.s3.ap-south-1.amazonaws.com/02.png",
+        low: "/images/002.webp",
+        high: "https://fourseasons-tril.s3.ap-south-1.amazonaws.com/002.png",
       },
       levels: [
         {
@@ -87,8 +87,8 @@ var data = {
       },
       linkHotspots: [
         {
-          yaw: 3.14,
-          pitch: 0.2,
+          yaw: 3.3,
+          pitch: 0.25,
           rotation: 0,
           target: "jeronimos",
         },
@@ -133,7 +133,7 @@ var data = {
       linkHotspots: [
         {
           yaw: 4.6,
-          pitch: 0.3,
+          pitch: 0.2,
           rotation: 0,
           target: "preFunctionArea3",
         },
@@ -177,7 +177,7 @@ var data = {
       },
       linkHotspots: [
         {
-          yaw: 1.3,
+          yaw: 1.48,
           pitch: 0.3,
           rotation: 0,
           target: "preFunctionArea4",
