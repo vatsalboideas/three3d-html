@@ -353,7 +353,15 @@
       ? scene.getCurrentScene()
       : scene.scene;
 
-    // Create a loading transition overlay
+    // Check if scene is already upgraded - if so, switch instantly
+    if (scene.isUpgraded) {
+      console.log(`⚡ Scene ${scene.data.id} already upgraded - instant switch`);
+      targetScene.switchTo({ transitionDuration: 0 });
+      startAutorotate();
+      return;
+    }
+
+    // Create a loading transition overlay for non-upgraded scenes only
     var loadingDiv = document.createElement("div");
     loadingDiv.style.cssText = `
       position: fixed;

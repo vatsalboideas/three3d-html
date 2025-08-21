@@ -8,8 +8,8 @@ var data = {
       id: "oriente-station",
       name: "Entry",
       images: {
-        low: "/images/001.webp",
-        high: "https://fourseasons-tril.s3.ap-south-1.amazonaws.com/001.png",
+        low: "/images/1-entry.webp",
+        high: "https://fourseasons-tril.s3.ap-south-1.amazonaws.com/1-entry.png",
       },
       levels: [
         {
@@ -719,8 +719,8 @@ var data = {
       id: "dimEntryView",
       name: "Dimensions View",
       images: {
-        low: "/images/dimensions/entry-dim-0.webp",
-        high: "https://fourseasons-tril.s3.ap-south-1.amazonaws.com/entry-dim-0.png",
+        low: "/images/dimensions/dim-entry-1.webp",
+        high: "https://fourseasons-tril.s3.ap-south-1.amazonaws.com/dim-entry-1.png",
       },
       levels: [
         {
@@ -756,8 +756,8 @@ var data = {
       id: "dimPreView",
       name: "Dimensions View",
       images: {
-        low: "/images/dimensions/pre-dim.webp",
-        high: "https://fourseasons-tril.s3.ap-south-1.amazonaws.com/pre-dim.png",
+        low: "/images/dimensions/dim-pre-1.webp",
+        high: "https://fourseasons-tril.s3.ap-south-1.amazonaws.com/dim-pre-1.png",
       },
       levels: [
         {
