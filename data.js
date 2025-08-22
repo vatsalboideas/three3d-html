@@ -488,8 +488,8 @@ var data = {
       name: "Center View",
       category: "wedding",
       images: {
-        low: "/images/wedding/center.webp",
-        high: "https://fourseasons-tril.s3.ap-south-1.amazonaws.com/wedding/center.png",
+        low: "/images/wedding/center-0.webp",
+        high: "https://fourseasons-tril.s3.ap-south-1.amazonaws.com/wedding/center-0.png",
       },
       levels: [
         {
@@ -540,8 +540,8 @@ var data = {
       name: "Stage View",
       category: "wedding",
       images: {
-        low: "/images/wedding/stage.webp",
-        high: "https://fourseasons-tril.s3.ap-south-1.amazonaws.com/wedding/stage.png",
+        low: "/images/wedding/stage-0.webp",
+        high: "https://fourseasons-tril.s3.ap-south-1.amazonaws.com/wedding/stage-0.png",
       },
       levels: [
         {
@@ -592,8 +592,8 @@ var data = {
       name: "Back View",
       category: "wedding",
       images: {
-        low: "/images/wedding/back.webp",
-        high: "https://fourseasons-tril.s3.ap-south-1.amazonaws.com/wedding/back.png",
+        low: "/images/wedding/back-0.webp",
+        high: "https://fourseasons-tril.s3.ap-south-1.amazonaws.com/wedding/back-0.png",
       },
       levels: [
         {

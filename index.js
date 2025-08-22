@@ -14,6 +14,28 @@
   var currentActiveScene = null;
   var sceneListAutoCloseTimer = null;
 
+  // Global quality indicator update function
+  function updateGlobalQualityInfo(scene) {
+    var info = document.getElementById("qualityInfo");
+    if (!info) {
+      info = document.createElement("div");
+      info.id = "qualityInfo";
+      info.style.cssText = `
+        position: fixed; bottom: 20px; right: 20px;
+        background: rgba(0,0,0,0.7); color: white;
+        padding: 6px 10px; border-radius: 4px; z-index: 1000;
+        font-family: Arial, sans-serif; font-size: 18px;
+      `;
+      document.body.appendChild(info);
+    }
+
+    var isUpgraded = scene.isUpgraded || false;
+    var qualityColor = isUpgraded ? "#4CAF50" : "#FF9800";
+    info.innerHTML = `<div style="color: ${qualityColor};">● ${
+      isUpgraded ? "8K" : "SD"
+    } - ${scene.data.name}</div>`;
+  }
+
   // DOM elements
   var panoElement = document.querySelector("#pano");
   var sceneNameElement = document.querySelector("#titleBar .sceneName");
@@ -82,8 +104,26 @@
     };
     img.onerror = function () {
       console.log(`❌ Failed to preload: ${imagePath}`);
+      // Mark as failed to prevent infinite retry
+      preloadedScenes[imagePath] = false;
     };
     img.src = imagePath;
+  }
+
+  // Scene validation function
+  function validateScene(scene) {
+    if (!scene || !scene.data || !scene.data.id) {
+      console.error('❌ Invalid scene object');
+      return false;
+    }
+    
+    var targetScene = scene.getCurrentScene ? scene.getCurrentScene() : scene.scene;
+    if (!targetScene) {
+      console.error(`❌ No valid scene reference for ${scene.data.id}`);
+      return false;
+    }
+    
+    return true;
   }
 
   // Create scenes with progressive loading
@@ -117,26 +157,7 @@
     var isUpgrading = false;
     var upgradeAborted = false;
 
-    // Quality indicator
-    function updateQualityInfo() {
-      var info = document.getElementById("qualityInfo");
-      if (!info) {
-        info = document.createElement("div");
-        info.id = "qualityInfo";
-        info.style.cssText = `
-          position: fixed; bottom: 20px; right: 20px;
-          background: rgba(0,0,0,0.7); color: white;
-          padding: 6px 10px; border-radius: 4px; z-index: 1000;
-          font-family: Arial, sans-serif; font-size: 18px;
-        `;
-        document.body.appendChild(info);
-      }
 
-      var qualityColor = upgraded ? "#4CAF50" : "#FF9800";
-      info.innerHTML = `<div style="color: ${qualityColor};">● ${
-        upgraded ? "8K" : "SD"
-      } - ${sceneData.name}</div>`;
-    }
 
     // Create HD scene
     function createHDScene() {
@@ -234,11 +255,13 @@
         upgraded = true;
         isUpgrading = false;
         loading.style.display = "none";
-        updateQualityInfo();
-        scene = hdSceneInstance;
 
-        // Mark scene as upgraded to prevent future reloads
+        // Store HD scene reference properly
+        sceneInstance.hdSceneRef = hdSceneInstance;
         sceneInstance.isUpgraded = true;
+        
+        // Update quality indicator with current scene info
+        updateGlobalQualityInfo(sceneInstance);
 
         // Restart autorotate after a short delay to ensure scene is fully loaded
         console.log(
@@ -247,9 +270,6 @@
         setTimeout(() => {
           startAutorotate();
         }, 300);
-
-        // Update the scene instance reference
-        sceneInstance.scene = hdSceneInstance;
 
         console.log(`🎉 ${sceneData.id} seamlessly upgraded to 8K`);
       };
@@ -276,6 +296,10 @@
         if (linkedSceneData) {
           setTimeout(() => {
             preloadSceneImage(linkedSceneData.images.low);
+            // Also preload HD image for faster upgrades
+            setTimeout(() => {
+              preloadSceneImage(linkedSceneData.images.high);
+            }, 2000);
           }, 1000);
         }
       });
@@ -295,15 +319,17 @@
       scene: scene,
       view: view,
       isUpgraded: false,
+      hdSceneRef: null, // Store HD scene reference
       getCurrentScene: function () {
-        return scene; // This will return the current scene (SD or HD)
+        // Return HD scene if available and upgraded, otherwise return SD scene
+        return this.isUpgraded && this.hdSceneRef ? this.hdSceneRef : scene;
       },
       startUpgrade: function () {
         if (this.isUpgraded) return; // Don't upgrade if already upgraded
         upgradeAborted = false;
         if (upgradeTimeout) clearTimeout(upgradeTimeout);
         upgradeTimeout = setTimeout(upgradeToHD, 1500); // Reduced delay
-        updateQualityInfo();
+        updateGlobalQualityInfo(this);
       },
       stopUpgrade: function () {
         console.log(`🛑 Stopping upgrade for ${sceneData.id}`);
@@ -311,12 +337,20 @@
         if (upgradeTimeout) clearTimeout(upgradeTimeout);
         upgraded = false;
         isUpgrading = false;
-        updateQualityInfo();
+        // Don't reset isUpgraded flag if scene was already upgraded
+        updateGlobalQualityInfo(this);
 
         var loading = document.getElementById("loadingIndicator");
         if (loading) {
           loading.style.display = "none";
         }
+      },
+      // Reset scene to SD version (for debugging)
+      resetToSD: function() {
+        this.isUpgraded = false;
+        this.hdSceneRef = null;
+        upgraded = false;
+        console.log(`🔄 Reset ${sceneData.id} to SD version`);
       },
       isUpgrading: function () {
         return isUpgrading;
@@ -326,8 +360,49 @@
     return sceneInstance;
   });
 
+  // Debounce scene switching to prevent rapid switches
+  var switchingInProgress = false;
+  var lastSwitchTime = 0;
+
+
+
+  // Simple cleanup function for 8K loading indicators only
+  function cleanupLoadingIndicators() {
+    var loadingIndicator = document.getElementById("loadingIndicator");
+    if (loadingIndicator) {
+      loadingIndicator.style.display = "none";
+    }
+  }
+
+
+
   // Scene switching function
   function switchScene(scene) {
+    var now = Date.now();
+    
+    // Validate scene first
+    if (!validateScene(scene)) {
+      console.error(`❌ Cannot switch to invalid scene`);
+      return;
+    }
+    
+    // Prevent rapid switching (debounce)
+    if (switchingInProgress || (now - lastSwitchTime < 100)) {
+      console.log(`⏸️ Scene switch blocked - too rapid or in progress`);
+      return;
+    }
+    
+    switchingInProgress = true;
+    lastSwitchTime = now;
+    
+    // Failsafe timeout to reset switching flag
+    setTimeout(function() {
+      if (switchingInProgress) {
+        console.warn(`⚠️ Scene switch timeout for ${scene.data.id} - resetting`);
+        switchingInProgress = false;
+      }
+    }, 2000);
+    
     console.log(`🔄 Switching to scene: ${scene.data.id}`);
 
     // Stop all upgrades on other scenes
@@ -340,108 +415,48 @@
     // Update UI first
     updateSceneName(scene);
     updateSceneList(scene);
+    
+    // Update quality indicator immediately when switching scenes
+    updateGlobalQualityInfo(scene);
 
     var previousScene = currentActiveScene;
     currentActiveScene = scene;
     stopAutorotate();
 
-    // Set view parameters
+    // Set view parameters to ensure proper scene state
     scene.view.setParameters(scene.data.initialViewParameters);
 
-    // Get target scene
-    var targetScene = scene.getCurrentScene
-      ? scene.getCurrentScene()
-      : scene.scene;
+    // Get the correct scene reference - prioritize HD scene if available
+    var targetScene;
+    if (scene.isUpgraded && scene.hdSceneRef) {
+      targetScene = scene.hdSceneRef;
+      console.log(`🎯 Using HD scene reference for ${scene.data.id}`);
+    } else {
+      targetScene = scene.getCurrentScene ? scene.getCurrentScene() : scene.scene;
+    }
 
-    // Check if scene is already upgraded - if so, switch instantly
-    if (scene.isUpgraded) {
-      console.log(`⚡ Scene ${scene.data.id} already upgraded - instant switch`);
-      targetScene.switchTo({ transitionDuration: 0 });
-      startAutorotate();
+    // Ensure target scene exists
+    if (!targetScene) {
+      console.error(`❌ No valid scene found for ${scene.data.id}`);
+      switchingInProgress = false;
       return;
     }
 
-    // Create a loading transition overlay for non-upgraded scenes only
-    var loadingDiv = document.createElement("div");
-    loadingDiv.style.cssText = `
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: rgba(0,0,0,0.8);
-      z-index: 9999;
-      opacity: 0;
-      transition: opacity 0.2s ease;
-      pointer-events: none;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    `;
-
-    loadingDiv.innerHTML = `
-      <div style="
-        color: white;
-        font-family: Arial, sans-serif;
-        font-size: 16px;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        gap: 15px;
-      ">
-        <div style="
-          width: 30px;
-          height: 30px;
-          border: 3px solid rgba(255,255,255,0.3);
-          border-top: 3px solid white;
-          border-radius: 50%;
-          animation: spin 1s linear infinite;
-        "></div>
-        <div>Loading Scene...</div>
-      </div>
-    `;
-
-    document.body.appendChild(loadingDiv);
-
-    // Show loading transition
-    setTimeout(() => {
-      loadingDiv.style.opacity = "1";
-    }, 10);
-
-    // Switch scene during fade
-    setTimeout(() => {
-      targetScene.switchTo({ transitionDuration: 0 });
-
-      // Hide loading transition
-      setTimeout(() => {
-        loadingDiv.style.opacity = "0";
-        setTimeout(() => {
-          document.body.removeChild(loadingDiv);
-        }, 200);
-      }, 100);
-
-      // Start autorotate and upgrades
-      setTimeout(() => {
-        startAutorotate();
-        if (
-          currentActiveScene === scene &&
-          scene.startUpgrade &&
-          !scene.isUpgraded
-        ) {
-          scene.startUpgrade();
-        } else {
-          // Update quality indicator for already upgraded scenes
-          var info = document.getElementById("qualityInfo");
-          if (info) {
-            var isUpgraded = scene.isUpgraded || false;
-            var qualityColor = isUpgraded ? "#4CAF50" : "#FF9800";
-            info.innerHTML = `<div style="color: ${qualityColor};">● ${
-              isUpgraded ? "8K" : "SD"
-            } - ${scene.data.name}</div>`;
-          }
-        }
-      }, 150);
-    }, 100);
+    // Switch scene immediately - clean and fast
+    targetScene.view().setParameters(scene.data.initialViewParameters);
+    targetScene.switchTo({ transitionDuration: 0 });
+    
+    switchingInProgress = false;
+    updateGlobalQualityInfo(scene);
+    startAutorotate();
+    
+    if (
+      currentActiveScene === scene &&
+      scene.startUpgrade &&
+      !scene.isUpgraded
+    ) {
+      scene.startUpgrade();
+    }
   }
 
   // Initialize first scene
@@ -449,6 +464,8 @@
     if (scenes[0]) {
       currentActiveScene = scenes[0];
       switchScene(scenes[0]);
+      // Initialize quality indicator for first scene
+      updateGlobalQualityInfo(scenes[0]);
     }
   }
 
@@ -973,6 +990,12 @@
       });
     }
   });
+
+  // Expose reset function globally for debugging
+  window.resetSceneSwitching = function() {
+    switchingInProgress = false;
+    console.log('🔄 Scene switching reset manually');
+  };
 
   // Initialize
   addSceneListInteractionListeners();
