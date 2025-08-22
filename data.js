@@ -644,8 +644,8 @@ var data = {
       name: "Blank View",
       category: "wedding",
       images: {
-        low: "/images/wedding/blank.webp",
-        high: "https://fourseasons-tril.s3.ap-south-1.amazonaws.com/wedding/blank.png",
+        low: "/images/wedding/blank-1.webp",
+        high: "https://fourseasons-tril.s3.ap-south-1.amazonaws.com/wedding/blank-1.png",
       },
       levels: [
         {
@@ -794,8 +794,8 @@ var data = {
       name: "Dimensions View",
       category: "wedding",
       images: {
-        low: "/images/wedding/dim-1.webp",
-        high: "https://fourseasons-tril.s3.ap-south-1.amazonaws.com/wedding/dim-1.png",
+        low: "/images/wedding/dim-2.webp",
+        high: "https://fourseasons-tril.s3.ap-south-1.amazonaws.com/wedding/dim-2.png",
       },
       levels: [
         {
