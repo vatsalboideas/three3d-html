@@ -113,16 +113,18 @@
   // Scene validation function
   function validateScene(scene) {
     if (!scene || !scene.data || !scene.data.id) {
-      console.error('❌ Invalid scene object');
+      console.error("❌ Invalid scene object");
       return false;
     }
-    
-    var targetScene = scene.getCurrentScene ? scene.getCurrentScene() : scene.scene;
+
+    var targetScene = scene.getCurrentScene
+      ? scene.getCurrentScene()
+      : scene.scene;
     if (!targetScene) {
       console.error(`❌ No valid scene reference for ${scene.data.id}`);
       return false;
     }
-    
+
     return true;
   }
 
@@ -156,8 +158,6 @@
     var hdScene = null;
     var isUpgrading = false;
     var upgradeAborted = false;
-
-
 
     // Create HD scene
     function createHDScene() {
@@ -259,7 +259,7 @@
         // Store HD scene reference properly
         sceneInstance.hdSceneRef = hdSceneInstance;
         sceneInstance.isUpgraded = true;
-        
+
         // Update quality indicator with current scene info
         updateGlobalQualityInfo(sceneInstance);
 
@@ -346,7 +346,7 @@
         }
       },
       // Reset scene to SD version (for debugging)
-      resetToSD: function() {
+      resetToSD: function () {
         this.isUpgraded = false;
         this.hdSceneRef = null;
         upgraded = false;
@@ -364,8 +364,6 @@
   var switchingInProgress = false;
   var lastSwitchTime = 0;
 
-
-
   // Simple cleanup function for 8K loading indicators only
   function cleanupLoadingIndicators() {
     var loadingIndicator = document.getElementById("loadingIndicator");
@@ -374,35 +372,35 @@
     }
   }
 
-
-
   // Scene switching function
   function switchScene(scene) {
     var now = Date.now();
-    
+
     // Validate scene first
     if (!validateScene(scene)) {
       console.error(`❌ Cannot switch to invalid scene`);
       return;
     }
-    
+
     // Prevent rapid switching (debounce)
-    if (switchingInProgress || (now - lastSwitchTime < 100)) {
+    if (switchingInProgress || now - lastSwitchTime < 100) {
       console.log(`⏸️ Scene switch blocked - too rapid or in progress`);
       return;
     }
-    
+
     switchingInProgress = true;
     lastSwitchTime = now;
-    
+
     // Failsafe timeout to reset switching flag
-    setTimeout(function() {
+    setTimeout(function () {
       if (switchingInProgress) {
-        console.warn(`⚠️ Scene switch timeout for ${scene.data.id} - resetting`);
+        console.warn(
+          `⚠️ Scene switch timeout for ${scene.data.id} - resetting`
+        );
         switchingInProgress = false;
       }
     }, 2000);
-    
+
     console.log(`🔄 Switching to scene: ${scene.data.id}`);
 
     // Stop all upgrades on other scenes
@@ -415,7 +413,7 @@
     // Update UI first
     updateSceneName(scene);
     updateSceneList(scene);
-    
+
     // Update quality indicator immediately when switching scenes
     updateGlobalQualityInfo(scene);
 
@@ -432,7 +430,9 @@
       targetScene = scene.hdSceneRef;
       console.log(`🎯 Using HD scene reference for ${scene.data.id}`);
     } else {
-      targetScene = scene.getCurrentScene ? scene.getCurrentScene() : scene.scene;
+      targetScene = scene.getCurrentScene
+        ? scene.getCurrentScene()
+        : scene.scene;
     }
 
     // Ensure target scene exists
@@ -445,11 +445,11 @@
     // Switch scene immediately - clean and fast
     targetScene.view().setParameters(scene.data.initialViewParameters);
     targetScene.switchTo({ transitionDuration: 0 });
-    
+
     switchingInProgress = false;
     updateGlobalQualityInfo(scene);
     startAutorotate();
-    
+
     if (
       currentActiveScene === scene &&
       scene.startUpgrade &&
@@ -992,9 +992,9 @@
   });
 
   // Expose reset function globally for debugging
-  window.resetSceneSwitching = function() {
+  window.resetSceneSwitching = function () {
     switchingInProgress = false;
-    console.log('🔄 Scene switching reset manually');
+    console.log("🔄 Scene switching reset manually");
   };
 
   // Initialize

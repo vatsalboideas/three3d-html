@@ -242,8 +242,8 @@ var data = {
       name: "Center View",
       category: "corporate",
       images: {
-        low: "/images/center.webp",
-        high: "https://fourseasons-tril.s3.ap-south-1.amazonaws.com/center.png",
+        low: "/images/center0.webp",
+        high: "https://fourseasons-tril.s3.ap-south-1.amazonaws.com/center0.png",
       },
       levels: [
         {
@@ -294,8 +294,8 @@ var data = {
       name: "Stage View",
       category: "corporate",
       images: {
-        low: "/images/stage.webp",
-        high: "https://fourseasons-tril.s3.ap-south-1.amazonaws.com/stage.png",
+        low: "/images/stage0.webp",
+        high: "https://fourseasons-tril.s3.ap-south-1.amazonaws.com/stage0.png",
       },
       levels: [
         {
@@ -346,8 +346,8 @@ var data = {
       name: "Back View",
       category: "corporate",
       images: {
-        low: "/images/back.webp",
-        high: "https://fourseasons-tril.s3.ap-south-1.amazonaws.com/back.png",
+        low: "/images/back0.webp",
+        high: "https://fourseasons-tril.s3.ap-south-1.amazonaws.com/back0.png",
       },
       levels: [
         {
@@ -398,8 +398,8 @@ var data = {
       name: "Blank View",
       category: "corporate",
       images: {
-        low: "/images/blank.webp",
-        high: "https://fourseasons-tril.s3.ap-south-1.amazonaws.com/blank.png",
+        low: "/images/blank0.webp",
+        high: "https://fourseasons-tril.s3.ap-south-1.amazonaws.com/blank0.png",
       },
       levels: [
         {
@@ -682,8 +682,8 @@ var data = {
       name: "Dimensions View",
       category: "corporate",
       images: {
-        low: "/images/dimensions/dim-corporate-1.webp",
-        high: "https://fourseasons-tril.s3.ap-south-1.amazonaws.com/dim-corporate-1.png",
+        low: "/images/dimensions/dim-corporate-2.webp",
+        high: "https://fourseasons-tril.s3.ap-south-1.amazonaws.com/dim-corporate-2.png",
       },
       levels: [
         {
