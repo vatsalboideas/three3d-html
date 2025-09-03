@@ -592,8 +592,8 @@ var data = {
       name: "Back View",
       category: "wedding",
       images: {
-        low: "/images/wedding/back-1.webp",
-        high: "https://fourseasons-tril.s3.ap-south-1.amazonaws.com/wedding/back-1.png",
+        low: "/images/wedding/back-2.webp",
+        high: "https://fourseasons-tril.s3.ap-south-1.amazonaws.com/wedding/back-2.png",
       },
       levels: [
         {
