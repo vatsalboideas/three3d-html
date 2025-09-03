@@ -242,8 +242,8 @@ var data = {
       name: "Center View",
       category: "corporate",
       images: {
-        low: "/images/center0.webp",
-        high: "https://fourseasons-tril.s3.ap-south-1.amazonaws.com/center0.png",
+        low: "/images/center01.webp",
+        high: "https://fourseasons-tril.s3.ap-south-1.amazonaws.com/center01.png",
       },
       levels: [
         {
@@ -294,8 +294,8 @@ var data = {
       name: "Stage View",
       category: "corporate",
       images: {
-        low: "/images/stage0.webp",
-        high: "https://fourseasons-tril.s3.ap-south-1.amazonaws.com/stage0.png",
+        low: "/images/stage01.webp",
+        high: "https://fourseasons-tril.s3.ap-south-1.amazonaws.com/stage01.png",
       },
       levels: [
         {
@@ -346,8 +346,8 @@ var data = {
       name: "Back View",
       category: "corporate",
       images: {
-        low: "/images/back0.webp",
-        high: "https://fourseasons-tril.s3.ap-south-1.amazonaws.com/back0.png",
+        low: "/images/back01.webp",
+        high: "https://fourseasons-tril.s3.ap-south-1.amazonaws.com/back01.png",
       },
       levels: [
         {
@@ -398,8 +398,8 @@ var data = {
       name: "Blank View",
       category: "corporate",
       images: {
-        low: "/images/blank0.webp",
-        high: "https://fourseasons-tril.s3.ap-south-1.amazonaws.com/blank0.png",
+        low: "/images/blank01.webp",
+        high: "https://fourseasons-tril.s3.ap-south-1.amazonaws.com/blank01.png",
       },
       levels: [
         {
@@ -488,8 +488,8 @@ var data = {
       name: "Center View",
       category: "wedding",
       images: {
-        low: "/images/wedding/center-1.webp",
-        high: "https://fourseasons-tril.s3.ap-south-1.amazonaws.com/wedding/center-1.png",
+        low: "/images/wedding/center-2.webp",
+        high: "https://fourseasons-tril.s3.ap-south-1.amazonaws.com/wedding/center-2.png",
       },
       levels: [
         {
@@ -644,8 +644,8 @@ var data = {
       name: "Blank View",
       category: "wedding",
       images: {
-        low: "/images/wedding/blank-1.webp",
-        high: "https://fourseasons-tril.s3.ap-south-1.amazonaws.com/wedding/blank-1.png",
+        low: "/images/wedding/blank-2.webp",
+        high: "https://fourseasons-tril.s3.ap-south-1.amazonaws.com/wedding/blank-2.png",
       },
       levels: [
         {
@@ -682,8 +682,8 @@ var data = {
       name: "Dimensions View",
       category: "corporate",
       images: {
-        low: "/images/dimensions/dim-corporate-2.webp",
-        high: "https://fourseasons-tril.s3.ap-south-1.amazonaws.com/dim-corporate-2.png",
+        low: "/images/dimensions/dimensions-corporate01.webp",
+        high: "https://fourseasons-tril.s3.ap-south-1.amazonaws.com/dimensions-corporate01.png",
       },
       levels: [
         {
