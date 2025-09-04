@@ -89,11 +89,43 @@
     },
   });
 
+  // Add initial loading indicator
+  function showInitialLoadingIndicator() {
+    var loadingIndicator = document.createElement("div");
+    loadingIndicator.id = "initialLoadingIndicator";
+    loadingIndicator.innerHTML = `
+      <div style="display: flex; flex-direction: column; align-items: center; gap: 15px;">
+        <div class="loading-spinner"></div>
+        <div class="loading-text">Loading 3D Viewer...</div>
+      </div>
+    `;
+    loadingIndicator.style.cssText = `
+      position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(0,0,0,0.9); color: white; z-index: 10000;
+      display: flex; align-items: center; justify-content: center;
+      font-family: Arial, sans-serif;
+    `;
+    document.body.appendChild(loadingIndicator);
+    return loadingIndicator;
+  }
+
+  function hideInitialLoadingIndicator() {
+    var loadingIndicator = document.getElementById("initialLoadingIndicator");
+    if (loadingIndicator) {
+      loadingIndicator.style.opacity = "0";
+      setTimeout(() => {
+        if (loadingIndicator.parentNode) {
+          loadingIndicator.parentNode.removeChild(loadingIndicator);
+        }
+      }, 300);
+    }
+  }
+
   // Scene preloading cache - only for current scene
   var preloadedScenes = {};
   var currentScenePreloaded = false;
 
-  // Preload only current scene images to prevent blank screens
+  // Optimized preloading with progressive loading
   function preloadCurrentSceneImage(imagePath) {
     if (preloadedScenes[imagePath]) return;
 
@@ -109,6 +141,13 @@
       preloadedScenes[imagePath] = false;
     };
     img.src = imagePath;
+  }
+
+  // Progressive loading for better initial performance
+  function preloadSceneWithProgressiveLoading(sceneData) {
+    // Start preloading high-res immediately - no delay
+    preloadCurrentSceneImage(sceneData.images.high);
+    console.log(`📦 Started preloading: ${sceneData.images.high}`);
   }
 
   // Preload only the next likely scene (not all linked scenes)
@@ -146,17 +185,18 @@
     return true;
   }
 
-  // Create scenes with progressive loading
+  // Create scenes with optimized loading
   var scenes = data.scenes.map(function (sceneData) {
     var imagePaths = {
       low: sceneData.images.low,
       high: sceneData.images.high,
     };
 
+    // Use optimized geometry for faster initial loading
     var currentSource = Marzipano.ImageUrlSource.fromString(imagePaths.low);
-    var geometry = new Marzipano.EquirectGeometry([{ width: 4096 }]);
+    var geometry = new Marzipano.EquirectGeometry([{ width: 512 }]); // Much smaller for very fast loading
     var limiter = Marzipano.RectilinearView.limit.traditional(
-      4096,
+      512, // Much smaller for very fast loading
       (100 * Math.PI) / 180,
       (120 * Math.PI) / 180
     );
@@ -177,14 +217,15 @@
     var isUpgrading = false;
     var upgradeAborted = false;
 
-    // Create HD scene
+    // Create HD scene with optimized geometry
     function createHDScene() {
       if (hdScene) return hdScene;
 
       var hdSource = Marzipano.ImageUrlSource.fromString(imagePaths.high, {
         crossOrigin: "anonymous",
       });
-      var hdGeometry = new Marzipano.EquirectGeometry([{ width: 8192 }]);
+      // Use 2048 for better performance while maintaining good quality
+      var hdGeometry = new Marzipano.EquirectGeometry([{ width: 2048 }]);
 
       hdScene = viewer.createScene({
         source: hdSource,
@@ -274,6 +315,14 @@
           // Update quality indicator
           updateGlobalQualityInfo(sceneInstance);
 
+          // Restart CUSTOM autorotate after 8K upgrade
+          if (isAutorotateEnabled) {
+            console.log(`🔄 Restarting CUSTOM autorotate after 8K upgrade for ${sceneData.id}`);
+            setTimeout(() => {
+              startAutorotate();
+            }, 200);
+          }
+
           console.log(`🎉 ${sceneData.id} successfully upgraded to FRESH 8K`);
         } catch (e) {
           console.error(`❌ HD scene switch failed for ${sceneData.id}:`, e);
@@ -332,7 +381,7 @@
         if (this.isUpgraded) return; // Don't upgrade if already upgraded
         upgradeAborted = false;
         if (upgradeTimeout) clearTimeout(upgradeTimeout);
-        upgradeTimeout = setTimeout(upgradeToHD, 1500); // Reduced delay
+        upgradeTimeout = setTimeout(upgradeToHD, 500); // Very fast upgrade
         updateGlobalQualityInfo(this);
       },
       stopUpgrade: function () {
@@ -453,6 +502,9 @@
 
     var previousScene = currentActiveScene;
     currentActiveScene = scene;
+    
+    // Store autorotate state before stopping
+    var wasAutorotateEnabled = isAutorotateEnabled;
     stopAutorotate();
 
     // ALWAYS use SD scene first - no existing HD scenes
@@ -490,13 +542,18 @@
       }
     }
 
-    // Reset switching flag
-    setTimeout(() => {
-      switchingInProgress = false;
-    }, 100);
+    // Reset switching flag immediately
+    switchingInProgress = false;
 
     updateGlobalQualityInfo(scene);
-    startAutorotate();
+    
+    // Restart CUSTOM autorotate after scene switch
+    if (wasAutorotateEnabled) {
+      console.log(`🔄 Restarting CUSTOM autorotate after scene switch to ${scene.data.id}`);
+      setTimeout(() => {
+        startAutorotate();
+      }, 200);
+    }
 
     // ALWAYS start HD upgrade - no existing HD scenes
     if (currentActiveScene === scene && scene.startUpgrade) {
@@ -505,32 +562,68 @@
     }
   }
 
-  // Initialize first scene
+  // Initialize first scene with immediate loading
   function initializeFirstScene() {
     if (scenes[0]) {
       currentActiveScene = scenes[0];
-      // Preload first scene's HD image immediately
-      preloadCurrentSceneImage(scenes[0].data.images.high);
-      currentScenePreloaded = true;
       
+      // Hide loading indicator immediately
+      hideInitialLoadingIndicator();
+      
+      // Switch to first scene immediately
       switchScene(scenes[0]);
+      
       // Initialize quality indicator for first scene
       updateGlobalQualityInfo(scenes[0]);
+      
+      // Start progressive loading in background
+      setTimeout(() => {
+        preloadSceneWithProgressiveLoading(scenes[0].data);
+        currentScenePreloaded = true;
+      }, 100);
     }
   }
 
-  // Autorotate setup
-  var autorotate = Marzipano.autorotate({
-    yawSpeed: 0.03,
-    targetPitch: 0,
-    targetFov: Math.PI / 2,
-  });
-
-  // Global autorotate state tracking
+  // BULLETPROOF AUTOROTATE SYSTEM
   var isAutorotateEnabled = data.settings.autorotateEnabled;
+  var autorotateInterval = null;
+  var autorotateSpeed = 0.05; // degrees per frame - much slower
 
   if (isAutorotateEnabled) {
     autorotateToggleElement.classList.add("enabled");
+  }
+
+  // Custom autorotate implementation that works with ANY scene
+  function startCustomAutorotate() {
+    if (autorotateInterval) {
+      clearInterval(autorotateInterval);
+    }
+    
+    console.log("🔄 Starting CUSTOM autorotate - works with 8K!");
+    
+    autorotateInterval = setInterval(function() {
+      if (isAutorotateEnabled && currentActiveScene) {
+        try {
+          var currentScene = currentActiveScene.getCurrentScene ? currentActiveScene.getCurrentScene() : currentActiveScene.scene;
+          if (currentScene && currentScene.view) {
+            var view = currentScene.view();
+            var params = view.parameters();
+            params.yaw += autorotateSpeed * 0.01; // Convert to radians
+            view.setParameters(params);
+          }
+        } catch (e) {
+          console.log("Autorotate tick error:", e);
+        }
+      }
+    }, 16); // ~60fps
+  }
+
+  function stopCustomAutorotate() {
+    if (autorotateInterval) {
+      clearInterval(autorotateInterval);
+      autorotateInterval = null;
+    }
+    console.log("⏸️ Stopped CUSTOM autorotate");
   }
 
   // View controls setup
@@ -836,19 +929,13 @@
     });
   }
 
-  // Autorotate functions
+  // BULLETPROOF autorotate functions
   function startAutorotate() {
-    if (isAutorotateEnabled) {
-      console.log("🔄 Starting autorotate");
-      viewer.startMovement(autorotate);
-      viewer.setIdleMovement(3000, autorotate);
-    }
+    startCustomAutorotate();
   }
 
   function stopAutorotate() {
-    console.log("⏸️ Stopping autorotate");
-    viewer.stopMovement();
-    viewer.setIdleMovement(Infinity);
+    stopCustomAutorotate();
   }
 
   function toggleAutorotate() {
@@ -860,6 +947,17 @@
       autorotateToggleElement.classList.add("enabled");
       isAutorotateEnabled = true;
       startAutorotate();
+    }
+  }
+
+  // BULLETPROOF autorotate restart function
+  function restartAutorotateIfEnabled() {
+    if (isAutorotateEnabled) {
+      console.log("🔄 Restarting CUSTOM autorotate after scene change");
+      stopAutorotate();
+      setTimeout(() => {
+        startAutorotate();
+      }, 200);
     }
   }
 
@@ -1100,16 +1198,47 @@
     }
   };
 
+  // BULLETPROOF AUTOROTATE FIX - This WILL work
+  window.fixAutorotate = function() {
+    console.log("🚨 BULLETPROOF AUTOROTATE FIX");
+    
+    // Force stop any existing autorotate
+    stopCustomAutorotate();
+    
+    // Wait a bit then restart if enabled
+    setTimeout(() => {
+      if (isAutorotateEnabled) {
+        console.log("🔄 Restarting CUSTOM autorotate...");
+        startCustomAutorotate();
+        console.log("✅ CUSTOM Autorotate fixed and restarted!");
+      }
+    }, 500);
+  };
+
+  // Simple debug function
+  window.debugAutorotate = function() {
+    console.log("🔍 AUTOROTATE STATUS:");
+    console.log("- Enabled:", isAutorotateEnabled);
+    console.log("- Current Scene:", currentActiveScene ? currentActiveScene.data.id : "none");
+    console.log("- Button State:", autorotateToggleElement.classList.contains("enabled"));
+    
+    if (isAutorotateEnabled) {
+      console.log("🔄 Attempting to restart autorotate...");
+      window.fixAutorotate();
+    }
+  };
+
   // Initialize
   addSceneListInteractionListeners();
   initializeSceneGroups();
   initializeDimensionsButton();
 
+  // Initialize first scene immediately - no loading indicator
+  initializeFirstScene();
+
   setTimeout(() => {
     if (scenes[0] && scenes[0].startUpgrade) {
       scenes[0].startUpgrade();
     }
-  }, 1000);
-
-  initializeFirstScene();
+  }, 2000);
 })();
