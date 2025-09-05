@@ -2,6 +2,15 @@
 <html>
   <head>
     <title>Four Seasons 3D Viewer | Jio Creative Labs</title>
+    <!-- Suppress external font loading errors from browser extensions -->
+    <script>
+      window.addEventListener('error', function(e) {
+        if (e.message && e.message.includes('fonts.googleapis.com')) {
+          e.preventDefault();
+          return false;
+        }
+      });
+    </script>
     <meta
       name="description"
       content="A 360° virtual tour of Four Seasons venue spaces."
@@ -16,10 +25,6 @@
         width: device-width;
       }
     </style>
-    <link
-      rel="stylesheet"
-      href="https://www.marzipano.net/demos/common/reset.css"
-    />
     <link rel="stylesheet" href="style.css" />
   </head>
   <body class="multiple-scenes view-control-buttons">
