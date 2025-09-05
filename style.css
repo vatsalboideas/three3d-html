@@ -670,7 +670,14 @@ body.view-control-buttons .viewControlButton {
 
 @media (max-width: 600px) {
   body.view-control-buttons .viewControlButton {
-    display: none;
+    display: block;
+    width: 35px;
+    height: 35px;
+  }
+  
+  .viewControlButton .icon {
+    width: 25px;
+    height: 25px;
   }
 }
 

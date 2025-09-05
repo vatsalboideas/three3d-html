@@ -1,6 +1,5 @@
 /*
  * Four Seasons 3D Viewer - Marzipano Implementation
- * Clean and optimized version
  */
 "use strict";
 
@@ -14,7 +13,7 @@
   var currentActiveScene = null;
   var sceneListAutoCloseTimer = null;
 
-  // Global quality indicator update function
+  // Quality indicator update function
   function updateGlobalQualityInfo(scene) {
     var info = document.getElementById("qualityInfo");
     if (!info) {
@@ -89,26 +88,7 @@
     },
   });
 
-  // Add initial loading indicator
-  function showInitialLoadingIndicator() {
-    var loadingIndicator = document.createElement("div");
-    loadingIndicator.id = "initialLoadingIndicator";
-    loadingIndicator.innerHTML = `
-      <div style="display: flex; flex-direction: column; align-items: center; gap: 15px;">
-        <div class="loading-spinner"></div>
-        <div class="loading-text">Loading 3D Viewer...</div>
-      </div>
-    `;
-    loadingIndicator.style.cssText = `
-      position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-      background: rgba(0,0,0,0.9); color: white; z-index: 10000;
-      display: flex; align-items: center; justify-content: center;
-      font-family: Arial, sans-serif;
-    `;
-    document.body.appendChild(loadingIndicator);
-    return loadingIndicator;
-  }
-
+  // Loading indicator functions
   function hideInitialLoadingIndicator() {
     var loadingIndicator = document.getElementById("initialLoadingIndicator");
     if (loadingIndicator) {
@@ -121,47 +101,19 @@
     }
   }
 
-  // Scene preloading cache - only for current scene
+  // Scene preloading cache
   var preloadedScenes = {};
-  var currentScenePreloaded = false;
 
-  // Optimized preloading with progressive loading
-  function preloadCurrentSceneImage(imagePath) {
+  // Preload scene image
+  function preloadSceneImage(imagePath) {
     if (preloadedScenes[imagePath]) return;
 
     var img = new Image();
     img.crossOrigin = "anonymous";
     img.onload = function () {
       preloadedScenes[imagePath] = true;
-      console.log(`📦 Preloaded current scene: ${imagePath}`);
     };
     img.onerror = function () {
-      console.log(`❌ Failed to preload current scene: ${imagePath}`);
-      // Mark as failed to prevent infinite retry
-      preloadedScenes[imagePath] = false;
-    };
-    img.src = imagePath;
-  }
-
-  // Progressive loading for better initial performance
-  function preloadSceneWithProgressiveLoading(sceneData) {
-    // Start preloading high-res immediately - no delay
-    preloadCurrentSceneImage(sceneData.images.high);
-    console.log(`📦 Started preloading: ${sceneData.images.high}`);
-  }
-
-  // Preload only the next likely scene (not all linked scenes)
-  function preloadNextSceneImage(imagePath) {
-    if (preloadedScenes[imagePath]) return;
-
-    var img = new Image();
-    img.crossOrigin = "anonymous";
-    img.onload = function () {
-      preloadedScenes[imagePath] = true;
-      console.log(`📦 Preloaded next scene: ${imagePath}`);
-    };
-    img.onerror = function () {
-      console.log(`❌ Failed to preload next scene: ${imagePath}`);
       preloadedScenes[imagePath] = false;
     };
     img.src = imagePath;
@@ -196,9 +148,9 @@
     var currentSource = Marzipano.ImageUrlSource.fromString(imagePaths.low);
     var geometry = new Marzipano.EquirectGeometry([{ width: 512 }]); // Much smaller for very fast loading
     var limiter = Marzipano.RectilinearView.limit.traditional(
-      512, // Much smaller for very fast loading
-      (100 * Math.PI) / 180,
-      (120 * Math.PI) / 180
+      2048,
+      (90 * Math.PI) / 180, // Min FOV - this is the default wide view (minimum zoom)
+      (120 * Math.PI) / 180 // Max FOV - allows zooming out further
     );
     var view = new Marzipano.RectilinearView(
       sceneData.initialViewParameters,
@@ -254,11 +206,10 @@
       return hdScene;
     }
 
-    // AGGRESSIVE HD upgrade function - always creates fresh scenes
+    // HD upgrade function
     function upgradeToHD() {
       if (upgraded || upgradeAborted) return;
 
-      console.log(`🔄 AGGRESSIVE FRESH upgrade ${sceneData.id} to 8K - no caching`);
       isUpgrading = true;
 
       // Show loading indicator
@@ -278,68 +229,49 @@
       }
       loading.style.display = "block";
 
-      // ALWAYS create fresh HD scene - no caching
-      console.log(`🆕 Creating FRESH HD scene for ${sceneData.id}`);
       var hdSceneInstance = createHDScene();
       var currentParams = scene.view().parameters();
       hdSceneInstance.view().setParameters(currentParams);
 
-      // Preload HD image - NO TIMEOUT, will load regardless of network speed
       var img = new Image();
       img.crossOrigin = "anonymous";
 
       img.onload = function () {
-        // Only check if scene is still active, don't abort for other reasons
         if (currentActiveScene !== sceneInstance) {
-          console.log(
-            `🚫 ${sceneData.id} 8K loaded but scene changed - aborting switch`
-          );
           loading.style.display = "none";
           isUpgrading = false;
           return;
         }
 
-        console.log(`✅ FRESH 8K preloaded for ${sceneData.id}, switching to 8K scene`);
-
-        // Switch to fresh HD scene
         try {
           hdSceneInstance.switchTo({ transitionDuration: 0 });
           upgraded = true;
           isUpgrading = false;
           loading.style.display = "none";
 
-          // Store fresh HD scene reference
           sceneInstance.hdSceneRef = hdSceneInstance;
           sceneInstance.isUpgraded = true;
 
-          // Update quality indicator
           updateGlobalQualityInfo(sceneInstance);
 
-          // Restart CUSTOM autorotate after 8K upgrade
           if (isAutorotateEnabled) {
-            console.log(`🔄 Restarting CUSTOM autorotate after 8K upgrade for ${sceneData.id}`);
             setTimeout(() => {
               startAutorotate();
             }, 200);
           }
-
-          console.log(`🎉 ${sceneData.id} successfully upgraded to FRESH 8K`);
         } catch (e) {
-          console.error(`❌ HD scene switch failed for ${sceneData.id}:`, e);
+          console.error(`HD scene switch failed for ${sceneData.id}:`, e);
           loading.style.display = "none";
           isUpgrading = false;
         }
       };
 
       img.onerror = function () {
-        console.log(`❌ Failed to load 8K for ${sceneData.id} - retrying...`);
         loading.style.display = "none";
         isUpgrading = false;
-        
-        // Retry after a delay
+
         setTimeout(() => {
           if (currentActiveScene === sceneInstance && !upgraded) {
-            console.log(`🔄 Retrying FRESH 8K load for ${sceneData.id}`);
             upgradeToHD();
           }
         }, 3000);
@@ -385,26 +317,16 @@
         updateGlobalQualityInfo(this);
       },
       stopUpgrade: function () {
-        console.log(`🛑 Stopping upgrade for ${sceneData.id} - scene switched`);
         upgradeAborted = true;
         if (upgradeTimeout) clearTimeout(upgradeTimeout);
         upgraded = false;
         isUpgrading = false;
-        // CRITICAL: Don't reset isUpgraded flag or hdSceneRef if scene was already upgraded
-        // This preserves the HD scene reference when returning to previously upgraded scenes
         updateGlobalQualityInfo(this);
 
         var loading = document.getElementById("loadingIndicator");
         if (loading) {
           loading.style.display = "none";
         }
-      },
-      // Reset scene to SD version (for debugging)
-      resetToSD: function () {
-        this.isUpgraded = false;
-        this.hdSceneRef = null;
-        upgraded = false;
-        console.log(`🔄 Reset ${sceneData.id} to SD version`);
       },
       isUpgrading: function () {
         return isUpgrading;
@@ -414,11 +336,11 @@
     return sceneInstance;
   });
 
-  // Debounce scene switching to prevent rapid switches
+  // Scene switching control
   var switchingInProgress = false;
   var lastSwitchTime = 0;
 
-  // Simple cleanup function for 8K loading indicators only
+  // Cleanup function
   function cleanupLoadingIndicators() {
     var loadingIndicator = document.getElementById("loadingIndicator");
     if (loadingIndicator) {
@@ -426,196 +348,107 @@
     }
   }
 
-  // AGGRESSIVE reset preloading state - clear everything
-  function resetPreloadingState() {
-    currentScenePreloaded = false;
-    // NUCLEAR OPTION: Clear ALL preloaded scenes cache for fresh loading
-    preloadedScenes = {};
-    console.log("💥 NUCLEAR RESET: Cleared ALL preloaded scenes cache for fresh loading");
-  }
-
-  // Memory cleanup function to prevent buildup
-  function cleanupMemory() {
-    // Clear old preloaded scenes cache periodically to prevent memory buildup
-    var cacheSize = Object.keys(preloadedScenes).length;
-    if (cacheSize > 10) {
-      console.log(`🧹 Cleaning up preloaded scenes cache (${cacheSize} entries)`);
-      preloadedScenes = {};
-    }
-  }
-
-  // Emergency fallback function to prevent black screens
-  function emergencySceneFallback(scene) {
-    console.log(`🚨 Emergency fallback for ${scene.data.id}`);
-    
-    // Force create a fresh SD scene
-    var freshScene = scene.scene;
-    if (freshScene) {
-      try {
-        freshScene.view().setParameters(scene.data.initialViewParameters);
-        freshScene.switchTo({ transitionDuration: 0 });
-        console.log(`✅ Emergency fallback successful for ${scene.data.id}`);
-        return true;
-      } catch (e) {
-        console.error(`❌ Emergency fallback failed for ${scene.data.id}:`, e);
-        return false;
-      }
-    }
-    return false;
-  }
-
-  // AGGRESSIVE RELOAD: Force reload all scenes every time
+  // Scene switching function
   function switchScene(scene) {
     var now = Date.now();
 
-    // Validate scene first
     if (!validateScene(scene)) {
-      console.error(`❌ Cannot switch to invalid scene`);
       return;
     }
 
-    // Prevent rapid switching (debounce)
     if (switchingInProgress || now - lastSwitchTime < 100) {
-      console.log(`⏸️ Scene switch blocked - too rapid or in progress`);
       return;
     }
 
     switchingInProgress = true;
     lastSwitchTime = now;
 
-    console.log(`🔄 AGGRESSIVE RELOAD switch to scene: ${scene.data.id}`);
-
-    // NUCLEAR OPTION: Reset ALL scenes to force fresh loading
-    console.log(`💥 Resetting ALL scenes for fresh loading`);
+    // Reset other scenes
     scenes.forEach((s) => {
-      s.isUpgraded = false;
-      s.hdSceneRef = null;
       if (s.stopUpgrade) {
         s.stopUpgrade();
       }
     });
 
-    // Update UI first
     updateSceneName(scene);
     updateSceneList(scene);
     updateGlobalQualityInfo(scene);
 
-    var previousScene = currentActiveScene;
     currentActiveScene = scene;
-    
-    // Store autorotate state before stopping
+
     var wasAutorotateEnabled = isAutorotateEnabled;
     stopAutorotate();
 
-    // ALWAYS use SD scene first - no existing HD scenes
     var targetScene = scene.scene;
-    console.log(`🎯 FORCED SD scene for ${scene.data.id} - no caching`);
-
-    // Set view parameters
     targetScene.view().setParameters(scene.data.initialViewParameters);
 
-    // Switch to SD scene
     try {
       targetScene.switchTo({ transitionDuration: 0 });
-      console.log(`✅ Switched to fresh SD scene: ${scene.data.id}`);
     } catch (e) {
-      console.error(`❌ Scene switch failed for ${scene.data.id}:`, e);
+      console.error(`Scene switch failed for ${scene.data.id}:`, e);
     }
 
-    // Reset preloading state
-    resetPreloadingState();
-    cleanupMemory();
+    // Preload HD image
+    preloadSceneImage(scene.data.images.high);
 
-    // Preload current scene's HD image
-    if (!currentScenePreloaded) {
-      preloadCurrentSceneImage(scene.data.images.high);
-      currentScenePreloaded = true;
-    }
-
-    // Preload next scene
-    if (scene.data.linkHotspots && scene.data.linkHotspots.length > 0) {
-      var firstLinkedScene = findSceneDataById(scene.data.linkHotspots[0].target);
-      if (firstLinkedScene) {
-        setTimeout(() => {
-          preloadNextSceneImage(firstLinkedScene.images.low);
-        }, 1000);
-      }
-    }
-
-    // Reset switching flag immediately
     switchingInProgress = false;
 
     updateGlobalQualityInfo(scene);
-    
-    // Restart CUSTOM autorotate after scene switch
+
     if (wasAutorotateEnabled) {
-      console.log(`🔄 Restarting CUSTOM autorotate after scene switch to ${scene.data.id}`);
       setTimeout(() => {
         startAutorotate();
       }, 200);
     }
 
-    // ALWAYS start HD upgrade - no existing HD scenes
+    setTimeout(ensureZoomButtonsVisible, 200);
+
     if (currentActiveScene === scene && scene.startUpgrade) {
-      console.log(`🚀 FORCED HD upgrade for ${scene.data.id} - fresh loading`);
       scene.startUpgrade();
     }
   }
 
-  // Initialize first scene with immediate loading
+  // Initialize first scene
   function initializeFirstScene() {
     if (scenes[0]) {
       currentActiveScene = scenes[0];
-      
-      // Hide loading indicator immediately
       hideInitialLoadingIndicator();
-      
-      // Switch to first scene immediately
       switchScene(scenes[0]);
-      
-      // Initialize quality indicator for first scene
       updateGlobalQualityInfo(scenes[0]);
-      
-      // Start progressive loading in background
-      setTimeout(() => {
-        preloadSceneWithProgressiveLoading(scenes[0].data);
-        currentScenePreloaded = true;
-      }, 100);
     }
   }
 
-  // BULLETPROOF AUTOROTATE SYSTEM
+  // Autorotate system
   var isAutorotateEnabled = data.settings.autorotateEnabled;
   var autorotateInterval = null;
-  var autorotateSpeed = 0.05; // degrees per frame - much slower
+  var autorotateSpeed = 0.05;
 
   if (isAutorotateEnabled) {
     autorotateToggleElement.classList.add("enabled");
   }
 
-  // Custom autorotate implementation that works with ANY scene
   function startCustomAutorotate() {
     if (autorotateInterval) {
       clearInterval(autorotateInterval);
     }
-    
-    console.log("🔄 Starting CUSTOM autorotate - works with 8K!");
-    
-    autorotateInterval = setInterval(function() {
+
+    autorotateInterval = setInterval(function () {
       if (isAutorotateEnabled && currentActiveScene) {
         try {
-          var currentScene = currentActiveScene.getCurrentScene ? currentActiveScene.getCurrentScene() : currentActiveScene.scene;
+          var currentScene = currentActiveScene.getCurrentScene
+            ? currentActiveScene.getCurrentScene()
+            : currentActiveScene.scene;
           if (currentScene && currentScene.view) {
             var view = currentScene.view();
             var params = view.parameters();
-            params.yaw += autorotateSpeed * 0.01; // Convert to radians
+            params.yaw += autorotateSpeed * 0.01;
             view.setParameters(params);
           }
         } catch (e) {
-          console.log("Autorotate tick error:", e);
+          console.log("Autorotate error:", e);
         }
       }
-    }, 16); // ~60fps
+    }, 16);
   }
 
   function stopCustomAutorotate() {
@@ -623,7 +456,6 @@
       clearInterval(autorotateInterval);
       autorotateInterval = null;
     }
-    console.log("⏸️ Stopped CUSTOM autorotate");
   }
 
   // View controls setup
@@ -634,70 +466,160 @@
   var viewInElement = document.querySelector("#viewIn");
   var viewOutElement = document.querySelector("#viewOut");
 
-  var velocity = 0.7;
-  var friction = 3;
+  var velocity = 0.5; // Slower speed for better control
+  var friction = 3; // Better friction
 
   var controls = viewer.controls();
-  controls.registerMethod(
-    "upElement",
-    new Marzipano.ElementPressControlMethod(
-      viewUpElement,
-      "y",
-      -velocity,
-      friction
-    ),
-    true
-  );
-  controls.registerMethod(
-    "downElement",
-    new Marzipano.ElementPressControlMethod(
-      viewDownElement,
-      "y",
-      velocity,
-      friction
-    ),
-    true
-  );
-  controls.registerMethod(
-    "leftElement",
-    new Marzipano.ElementPressControlMethod(
-      viewLeftElement,
-      "x",
-      -velocity,
-      friction
-    ),
-    true
-  );
-  controls.registerMethod(
-    "rightElement",
-    new Marzipano.ElementPressControlMethod(
-      viewRightElement,
-      "x",
-      velocity,
-      friction
-    ),
-    true
-  );
-  controls.registerMethod(
-    "inElement",
-    new Marzipano.ElementPressControlMethod(
-      viewInElement,
-      "zoom",
-      -velocity,
-      friction
-    ),
-    true
-  );
-  controls.registerMethod(
-    "outElement",
-    new Marzipano.ElementPressControlMethod(
-      viewOutElement,
-      "zoom",
-      velocity,
-      friction
-    ),
-    true
-  );
+
+  // Track registered controls to avoid duplicates
+  var controlsRegistered = false;
+
+  // Register all view controls
+  function registerViewControls() {
+    if (
+      !viewUpElement ||
+      !viewDownElement ||
+      !viewLeftElement ||
+      !viewRightElement ||
+      !viewInElement ||
+      !viewOutElement
+    ) {
+      return false;
+    }
+
+    if (controlsRegistered) {
+      return true;
+    }
+
+    try {
+      controls.registerMethod(
+        "upElement",
+        new Marzipano.ElementPressControlMethod(
+          viewUpElement,
+          "y",
+          -velocity,
+          friction
+        ),
+        true
+      );
+      controls.registerMethod(
+        "downElement",
+        new Marzipano.ElementPressControlMethod(
+          viewDownElement,
+          "y",
+          velocity,
+          friction
+        ),
+        true
+      );
+      controls.registerMethod(
+        "leftElement",
+        new Marzipano.ElementPressControlMethod(
+          viewLeftElement,
+          "x",
+          -velocity,
+          friction
+        ),
+        true
+      );
+      controls.registerMethod(
+        "rightElement",
+        new Marzipano.ElementPressControlMethod(
+          viewRightElement,
+          "x",
+          velocity,
+          friction
+        ),
+        true
+      );
+
+      // Direct zoom button handlers
+      viewInElement.addEventListener("click", function () {
+        if (currentActiveScene) {
+          var currentScene = currentActiveScene.getCurrentScene
+            ? currentActiveScene.getCurrentScene()
+            : currentActiveScene.scene;
+          if (currentScene && currentScene.view) {
+            var view = currentScene.view();
+            var params = view.parameters();
+            params.fov = Math.max(params.fov - 0.1, (90 * Math.PI) / 180);
+            view.setParameters(params);
+          }
+        }
+      });
+
+      viewOutElement.addEventListener("click", function () {
+        if (currentActiveScene) {
+          var currentScene = currentActiveScene.getCurrentScene
+            ? currentActiveScene.getCurrentScene()
+            : currentActiveScene.scene;
+          if (currentScene && currentScene.view) {
+            var view = currentScene.view();
+            var params = view.parameters();
+            params.fov = Math.min(params.fov + 0.1, (120 * Math.PI) / 180);
+            view.setParameters(params);
+          }
+        }
+      });
+      controls.registerMethod(
+        "inElement",
+        new Marzipano.ElementPressControlMethod(
+          viewInElement,
+          "zoom",
+          -velocity * 3, // Stronger zoom in
+          friction
+        ),
+        true
+      );
+      controls.registerMethod(
+        "outElement",
+        new Marzipano.ElementPressControlMethod(
+          viewOutElement,
+          "zoom",
+          velocity * 3, // Stronger zoom out
+          friction
+        ),
+        true
+      );
+
+      controlsRegistered = true;
+      return true;
+    } catch (e) {
+      return false;
+    }
+  }
+
+  // Function to unregister existing controls
+  function unregisterViewControls() {
+    try {
+      controls.unregisterMethod("upElement");
+      controls.unregisterMethod("downElement");
+      controls.unregisterMethod("leftElement");
+      controls.unregisterMethod("rightElement");
+      controls.unregisterMethod("inElement");
+      controls.unregisterMethod("outElement");
+      controlsRegistered = false;
+      return true;
+    } catch (e) {
+      controlsRegistered = false;
+      return true;
+    }
+  }
+
+  registerViewControls();
+
+  function ensureZoomButtonsVisible() {
+    if (viewInElement) {
+      viewInElement.style.display = "block";
+      viewInElement.style.visibility = "visible";
+    }
+    if (viewOutElement) {
+      viewOutElement.style.display = "block";
+      viewOutElement.style.visibility = "visible";
+    }
+  }
+
+  setTimeout(ensureZoomButtonsVisible, 500);
 
   // Utility functions
   function sanitize(s) {
@@ -793,7 +715,6 @@
   function startAutoCloseTimer() {
     clearAutoCloseTimer();
     sceneListAutoCloseTimer = setTimeout(function () {
-      console.log("⏰ Auto-closing scene list after 5 seconds");
       hideSceneList();
     }, 5000);
   }
@@ -903,33 +824,29 @@
   // Scene list interaction listeners
   function addSceneListInteractionListeners() {
     sceneListElement.addEventListener("mouseenter", function () {
-      console.log("🖱️ Mouse entered scene list - pausing auto-close");
       clearAutoCloseTimer();
     });
 
     sceneListElement.addEventListener("mouseleave", function () {
       if (sceneListElement.classList.contains("enabled")) {
-        console.log("🖱️ Mouse left scene list - restarting auto-close");
         startAutoCloseTimer();
       }
     });
 
     sceneListElement.addEventListener("touchstart", function () {
-      console.log("👆 Touch detected on scene list - pausing auto-close");
       clearAutoCloseTimer();
     });
 
     sceneListElement.addEventListener("touchend", function () {
       setTimeout(function () {
         if (sceneListElement.classList.contains("enabled")) {
-          console.log("👆 Touch ended - restarting auto-close");
           startAutoCloseTimer();
         }
       }, 100);
     });
   }
 
-  // BULLETPROOF autorotate functions
+  // Autorotate functions
   function startAutorotate() {
     startCustomAutorotate();
   }
@@ -947,17 +864,6 @@
       autorotateToggleElement.classList.add("enabled");
       isAutorotateEnabled = true;
       startAutorotate();
-    }
-  }
-
-  // BULLETPROOF autorotate restart function
-  function restartAutorotateIfEnabled() {
-    if (isAutorotateEnabled) {
-      console.log("🔄 Restarting CUSTOM autorotate after scene change");
-      stopAutorotate();
-      setTimeout(() => {
-        startAutorotate();
-      }, 200);
     }
   }
 
@@ -1139,101 +1045,13 @@
     }
   });
 
-  // Expose reset function globally for debugging
-  window.resetSceneSwitching = function () {
-    switchingInProgress = false;
-    console.log("🔄 Scene switching reset manually");
-  };
-
-  // Emergency function to force reload all scenes
-  window.forceReloadAllScenes = function () {
-    console.log("🚨 Force reloading all scenes");
-    scenes.forEach(function(scene) {
-      scene.isUpgraded = false;
-      scene.hdSceneRef = null;
-    });
-    console.log("✅ All scenes reset, ready for fresh loading");
-  };
-
-  // Emergency function to force reload current scene
-  window.forceReloadCurrentScene = function () {
-    if (currentActiveScene) {
-      console.log(`🚨 Force reloading current scene: ${currentActiveScene.data.id}`);
-      currentActiveScene.isUpgraded = false;
-      currentActiveScene.hdSceneRef = null;
-      switchScene(currentActiveScene);
-    }
-  };
-
-  // NUCLEAR EMERGENCY FUNCTION - Use this if black screens persist
-  window.nuclearSceneFix = function() {
-    console.log("🚨 NUCLEAR SCENE FIX ACTIVATED - BREAKING ALL CACHING");
-    
-    // Hide any loading indicators
-    var loading = document.getElementById("sceneLoadingIndicator");
-    if (loading) loading.style.display = "none";
-    var hdLoading = document.getElementById("loadingIndicator");
-    if (hdLoading) hdLoading.style.display = "none";
-    
-    // NUCLEAR RESET: Break ALL scene caching
-    scenes.forEach(function(scene) {
-      scene.isUpgraded = false;
-      scene.hdSceneRef = null;
-    });
-    
-    // Clear ALL preloading cache
-    preloadedScenes = {};
-    currentScenePreloaded = false;
-    
-    // Reset switching state
-    switchingInProgress = false;
-    
-    // Force reload current scene with fresh SD
-    if (currentActiveScene) {
-      console.log(`🚨 NUCLEAR reloading: ${currentActiveScene.data.id} - FRESH LOADING`);
-      var targetScene = currentActiveScene.scene;
-      targetScene.view().setParameters(currentActiveScene.data.initialViewParameters);
-      targetScene.switchTo({ transitionDuration: 0 });
-      console.log("✅ NUCLEAR fix complete - scene should be visible now with FRESH loading");
-    }
-  };
-
-  // BULLETPROOF AUTOROTATE FIX - This WILL work
-  window.fixAutorotate = function() {
-    console.log("🚨 BULLETPROOF AUTOROTATE FIX");
-    
-    // Force stop any existing autorotate
-    stopCustomAutorotate();
-    
-    // Wait a bit then restart if enabled
-    setTimeout(() => {
-      if (isAutorotateEnabled) {
-        console.log("🔄 Restarting CUSTOM autorotate...");
-        startCustomAutorotate();
-        console.log("✅ CUSTOM Autorotate fixed and restarted!");
-      }
-    }, 500);
-  };
-
-  // Simple debug function
-  window.debugAutorotate = function() {
-    console.log("🔍 AUTOROTATE STATUS:");
-    console.log("- Enabled:", isAutorotateEnabled);
-    console.log("- Current Scene:", currentActiveScene ? currentActiveScene.data.id : "none");
-    console.log("- Button State:", autorotateToggleElement.classList.contains("enabled"));
-    
-    if (isAutorotateEnabled) {
-      console.log("🔄 Attempting to restart autorotate...");
-      window.fixAutorotate();
-    }
-  };
-
   // Initialize
   addSceneListInteractionListeners();
   initializeSceneGroups();
   initializeDimensionsButton();
 
-  // Initialize first scene immediately - no loading indicator
+  document.body.classList.add("view-control-buttons");
+
   initializeFirstScene();
 
   setTimeout(() => {
@@ -1242,3 +1060,4 @@
     }
   }, 2000);
 })();
+

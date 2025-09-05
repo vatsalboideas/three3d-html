@@ -8,9 +8,13 @@ var data = {
       id: "oriente-station",
       name: "Entry",
       images: {
-        low: "/images/1-entry.webp",
-        high: "https://fourseasons-tril.s3.ap-south-1.amazonaws.com/1-entry.png",
+        low: "/images/newprefunction/entry.webp",
+        high: "https://fourseasons-tril.s3.ap-south-1.amazonaws.com/new-prefunction/entry.png",
       },
+      // images: {
+      //   low: "/images/1-entry.webp",
+      //   high: "https://fourseasons-tril.s3.ap-south-1.amazonaws.com/1-entry.png",
+      // },
       levels: [
         {
           tileSize: 256,
@@ -52,10 +56,14 @@ var data = {
     {
       id: "electricity-museum",
       name: "Pre Function Area 1",
-      images: {
-        low: "/images/002.webp",
-        high: "https://fourseasons-tril.s3.ap-south-1.amazonaws.com/002.png",
+       images: {
+        low: "/images/newprefunction/2.webp",
+        high: "https://fourseasons-tril.s3.ap-south-1.amazonaws.com/new-prefunction/2.png",
       },
+      // images: {
+      //   low: "/images/002.webp",
+      //   high: "https://fourseasons-tril.s3.ap-south-1.amazonaws.com/002.png",
+      // },
       levels: [
         {
           tileSize: 256,
@@ -98,9 +106,13 @@ var data = {
       id: "jeronimos",
       name: "Pre Function Area 2",
       images: {
-        low: "/images/3.webp",
-        high: "https://fourseasons-tril.s3.ap-south-1.amazonaws.com/3.png",
+        low: "/images/newprefunction/3.webp",
+        high: "https://fourseasons-tril.s3.ap-south-1.amazonaws.com/new-prefunction/3.png",
       },
+      // images: {
+      //   low: "/images/3.webp",
+      //   high: "https://fourseasons-tril.s3.ap-south-1.amazonaws.com/3.png",
+      // },
       levels: [
         {
           tileSize: 256,
@@ -127,13 +139,14 @@ var data = {
       faceSize: 4096,
       initialViewParameters: {
         pitch: 0,
-        yaw: 4.7,
+        yaw: 0,
+        // yaw: 4.7,
         fov: 1.5707963267948966,
       },
       linkHotspots: [
         {
-          yaw: 4.6,
-          pitch: 0.2,
+          yaw: 0.3,
+          pitch: 0.35,
           rotation: 0,
           target: "preFunctionArea3",
         },
@@ -142,10 +155,14 @@ var data = {
     {
       id: "preFunctionArea3",
       name: "Pre Function Area 3",
-      images: {
-        low: "/images/004.webp",
-        high: "https://fourseasons-tril.s3.ap-south-1.amazonaws.com/004.jpg",
+     images: {
+        low: "/images/newprefunction/4.webp",
+        high: "https://fourseasons-tril.s3.ap-south-1.amazonaws.com/new-prefunction/4.png",
       },
+      // images: {
+      //   low: "/images/004.webp",
+      //   high: "https://fourseasons-tril.s3.ap-south-1.amazonaws.com/004.jpg",
+      // },
       levels: [
         {
           tileSize: 256,
@@ -172,15 +189,21 @@ var data = {
       faceSize: 4096,
       initialViewParameters: {
         pitch: 0,
-        yaw: 1.2,
+        yaw: 0,
         fov: 1.5707963267948966,
       },
       linkHotspots: [
         {
-          yaw: 1.48,
+          yaw: 0,
           pitch: 0.3,
           rotation: 0,
           target: "preFunctionArea4",
+        },
+        {
+          yaw: 1.3,
+          pitch: 0.4,
+          rotation: 0,
+          target: "jeronimos",
         },
       ],
     },
@@ -188,9 +211,13 @@ var data = {
       id: "preFunctionArea4",
       name: "Pre Function Area 4",
       images: {
-        low: "/images/005.webp",
-        high: "https://fourseasons-tril.s3.ap-south-1.amazonaws.com/005.jpg",
+        low: "/images/newprefunction/5.webp",
+        high: "https://fourseasons-tril.s3.ap-south-1.amazonaws.com/new-prefunction/5.jpg",
       },
+      // images: {
+      //   low: "/images/005.webp",
+      //   high: "https://fourseasons-tril.s3.ap-south-1.amazonaws.com/005.jpg",
+      // },
       levels: [
         {
           tileSize: 256,
@@ -718,10 +745,14 @@ var data = {
     {
       id: "dimEntryView",
       name: "Dimensions View",
-      images: {
-        low: "/images/dimensions/dim-entry-1.webp",
-        high: "https://fourseasons-tril.s3.ap-south-1.amazonaws.com/dim-entry-1.png",
+        images: {
+        low: "/images/newprefunction/Entry dimension.webp",
+        high: "https://fourseasons-tril.s3.ap-south-1.amazonaws.com/new-prefunction/Entry+dimension.png",
       },
+      // images: {
+      //   low: "/images/dimensions/dim-entry-1.webp",
+      //   high: "https://fourseasons-tril.s3.ap-south-1.amazonaws.com/dim-entry-1.png",
+      // },
       levels: [
         {
           tileSize: 256,
@@ -756,9 +787,13 @@ var data = {
       id: "dimPreView",
       name: "Dimensions View",
       images: {
-        low: "/images/dimensions/dim-pre-1.webp",
-        high: "https://fourseasons-tril.s3.ap-south-1.amazonaws.com/dim-pre-1.png",
+        low: "/images/newprefunction/2 dimension.webp",
+        high: "https://fourseasons-tril.s3.ap-south-1.amazonaws.com/new-prefunction/2+dimension.png",
       },
+      // images: {
+      //   low: "/images/dimensions/dim-pre-1.webp",
+      //   high: "https://fourseasons-tril.s3.ap-south-1.amazonaws.com/dim-pre-1.png",
+      // },
       levels: [
         {
           tileSize: 256,
